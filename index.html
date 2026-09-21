@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolyCGPA — Polytechnic CGPA Calculator & Student Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">Σ</span>
+            <span>Poly<span>CGPA</span></span>
+        </a>
+
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="sgpa.html">SGPA Calc</a>
+            <a href="cgpa.html">CGPA Calc</a>
+            <a href="history.html">History</a>
+        </nav>
+
+        <div class="nav-actions">
+            <button class="btn btn-secondary btn-sm theme-toggle-btn" title="Toggle Theme">
+                <span>☀️</span> Light
+            </button>
+            <a href="login.html" class="btn btn-outline btn-sm">
+                Student Login
+            </a>
+            <a href="dashboard.html" class="btn btn-primary btn-sm">
+                Portal Dashboard →
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="badge">
+                    <span class="dot"></span>
+                    Built for Polytechnic Students & Colleges
+                </div>
+
+                <h1>
+                    Calculate your
+                    <span>CGPA</span>
+                    with confidence.
+                </h1>
+
+                <p>
+                    A comprehensive, accurate student portal to calculate semester SGPA and cumulative CGPA. 
+                    Preloaded with official polytechnic branches, 6-semester curricula, automated credit weighting, 
+                    and academic performance analytics.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="sgpa.html" class="btn btn-primary">
+                        Start Calculating SGPA <span>→</span>
+                    </a>
+                    <a href="cgpa.html" class="btn btn-secondary">
+                        CGPA Calculator
+                    </a>
+                    <a href="dashboard.html" class="btn btn-outline">
+                        View Student Dashboard
+                    </a>
+                </div>
+
+                <div class="trust">
+                    <div class="avatars">
+                        <span>CS</span>
+                        <span>EC</span>
+                        <span>EE</span>
+                        <span>ME</span>
+                        <span>CE</span>
+                    </div>
+                    <p>Designed for Computer, Electronics, Electrical, Civil & Mechanical branches</p>
+                </div>
+            </div>
+
+            <!-- Interactive Live Calculator Preview -->
+            <div class="calculator-preview">
+                <div class="window-top">
+                    <div class="window-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span>Interactive SGPA Preview</span>
+                    <span class="badge" style="padding: 2px 8px; font-size: 10px;">Live Demo</span>
+                </div>
+
+                <div class="preview-content">
+                    <div class="preview-header">
+                        <div>
+                            <small>SEMESTER 3 • COMPUTER ENGG</small>
+                            <h3>Academic Performance</h3>
+                        </div>
+                        <div class="sgpa">
+                            <small>SEMESTER SGPA</small>
+                            <strong id="previewSgpaValue">8.83</strong>
+                        </div>
+                    </div>
+
+                    <div class="preview-subject">
+                        <div>
+                            <strong>Discrete Mathematics</strong>
+                            <small>4 Credits</small>
+                        </div>
+                        <select class="preview-grade select-grade-preview" data-credits="4" style="background:var(--bg-card); color:var(--accent-emerald); border:1px solid var(--border-highlight); border-radius:6px; cursor:pointer;">
+                            <option value="10" selected>A+ (10)</option>
+                            <option value="9">A (9)</option>
+                            <option value="8">B+ (8)</option>
+                            <option value="7">B (7)</option>
+                        </select>
+                    </div>
+
+                    <div class="preview-subject">
+                        <div>
+                            <strong>Data Structures in C/C++</strong>
+                            <small>4 Credits</small>
+                        </div>
+                        <select class="preview-grade select-grade-preview" data-credits="4" style="background:var(--bg-card); color:var(--accent-emerald); border:1px solid var(--border-highlight); border-radius:6px; cursor:pointer;">
+                            <option value="10">A+ (10)</option>
+                            <option value="9" selected>A (9)</option>
+                            <option value="8">B+ (8)</option>
+                            <option value="7">B (7)</option>
+                        </select>
+                    </div>
+
+                    <div class="preview-subject">
+                        <div>
+                            <strong>Database Management Systems</strong>
+                            <small>4 Credits</small>
+                        </div>
+                        <select class="preview-grade select-grade-preview" data-credits="4" style="background:var(--bg-card); color:var(--accent-emerald); border:1px solid var(--border-highlight); border-radius:6px; cursor:pointer;">
+                            <option value="10">A+ (10)</option>
+                            <option value="9">A (9)</option>
+                            <option value="8" selected>B+ (8)</option>
+                            <option value="7">B (7)</option>
+                        </select>
+                    </div>
+
+                    <div class="preview-subject">
+                        <div>
+                            <strong>Object Oriented Java</strong>
+                            <small>4 Credits</small>
+                        </div>
+                        <select class="preview-grade select-grade-preview" data-credits="4" style="background:var(--bg-card); color:var(--accent-emerald); border:1px solid var(--border-highlight); border-radius:6px; cursor:pointer;">
+                            <option value="10">A+ (10)</option>
+                            <option value="9" selected>A (9)</option>
+                            <option value="8">B+ (8)</option>
+                            <option value="7">B (7)</option>
+                        </select>
+                    </div>
+
+                    <div class="progress-area">
+                        <div class="progress-info">
+                            <span>Equivalent Percentage</span>
+                            <strong id="previewPercentValue">83.9% (First Class with Distinction)</strong>
+                        </div>
+                        <div class="progress-bar-wrap">
+                            <div class="progress-bar-fill" id="previewProgressBar" style="width: 88.3%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="section-heading">
+                <span>PORTAL CAPABILITIES</span>
+                <h2>Everything you need to track your diploma academics.</h2>
+            </div>
+
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <div class="feature-icon">Σ</div>
+                    <h3>Curated SGPA Calculator</h3>
+                    <p>Select your branch & semester to auto-load official polytechnic courses and credits. Add custom elective subjects on the fly.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">◎</div>
+                    <h3>Multi-Semester CGPA</h3>
+                    <p>Track your cumulative weighted average across all 6 semesters with instant equivalent percentage calculation.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Performance Analytics</h3>
+                    <p>Interactive CGPA trend line charts, SGPA comparison bars, grade distribution breakdown, and highest/lowest semester insights.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Saved Student History</h3>
+                    <p>Store your semester grade cards securely in LocalStorage. Access your past scores from any device at any time.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">🖨️</div>
+                    <h3>Printable Transcripts</h3>
+                    <p>Export professional printable grade cards and academic summary sheets tailored for placement interviews and higher studies.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Responsive</h3>
+                    <p>Fully optimized for mobile phones, tablets, laptops and desktops with smooth drawer navigation and clean dark & light themes.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="section-heading">
+                <span>HOW IT WORKS</span>
+                <h2>Three simple steps to calculate and track.</h2>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h3>Select Department & Semester</h3>
+                    <p>Choose from Computer, Electronics, Electrical, Civil, or Mechanical Engineering and pick your semester (1–6).</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h3>Pick Your Grades</h3>
+                    <p>Pre-populated subjects will load automatically with official credit hours. Simply select your received letter grade (O, A+, A, B+, B, C, P, F).</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h3>Save & Analyze</h3>
+                    <p>Get instant SGPA/CGPA, view your grade performance distribution, print result cards, and track trends on your student dashboard.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo">
+            <span class="logo-icon">Σ</span>
+            <span>Poly<span>CGPA</span></span>
+        </div>
+        <p>Polytechnic CGPA Calculator & Student Portal • Designed for technical colleges.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="data/departments.js"></script>
+    <script src="data/grading.js"></script>
+    <script src="data/subjects.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        // Interactive live preview logic on landing page
+        document.querySelectorAll('.select-grade-preview').forEach(select => {
+            select.addEventListener('change', updateLandingPreview);
+        });
+
+        function updateLandingPreview() {
+            let totalCredits = 0;
+            let totalPoints = 0;
+            document.querySelectorAll('.select-grade-preview').forEach(sel => {
+                const credits = parseFloat(sel.getAttribute('data-credits')) || 4;
+                const points = parseFloat(sel.value) || 0;
+                totalCredits += credits;
+                totalPoints += (credits * points);
+            });
+
+            const sgpa = (totalPoints / totalCredits).toFixed(2);
+            const percent = (sgpa * 9.5).toFixed(1);
+            const academicClass = DataService.getClass(sgpa);
+
+            document.getElementById('previewSgpaValue').textContent = sgpa;
+            document.getElementById('previewPercentValue').textContent = `${percent}% (${academicClass})`;
+            document.getElementById('previewProgressBar').style.width = `${Math.min(100, sgpa * 10)}%`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA Calculator — PolyCGPA Student Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="portal-layout">
+        <!-- Sidebar Backdrop -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+        <!-- Main Viewport -->
+        <div class="portal-main">
+            <!-- Topbar -->
+            <header class="portal-topbar">
+                <div class="topbar-left">
+                    <button class="mobile-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle menu">
+                        ☰
+                    </button>
+                    <div class="topbar-title">
+                        <h2>Semester SGPA Calculator</h2>
+                        <p>Calculate your semester Grade Point Average using official polytechnic curricula</p>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="btn btn-secondary btn-sm theme-toggle-btn">
+                        <span>☀️</span> Theme
+                    </button>
+                    <a href="cgpa.html" class="btn btn-outline btn-sm">
+                        CGPA Calculator →
+                    </a>
+                </div>
+            </header>
+
+            <!-- Printable Header for paper export -->
+            <div class="print-header">
+                <h2>STATE BOARD OF TECHNICAL EDUCATION</h2>
+                <h3>POLYTECHNIC SEMESTER GRADE REPORT</h3>
+                <p>Calculated via PolyCGPA Student Portal</p>
+            </div>
+
+            <!-- Main Content -->
+            <main class="portal-content">
+
+                <!-- Department & Semester Selection -->
+                <div class="selection-bar no-print">
+                    <div>
+                        <label for="selectDepartment">Select Department / Branch</label>
+                        <select id="selectDepartment" class="form-control">
+                            <option value="cse">Computer Engineering (CSE)</option>
+                            <option value="ece">Electronics Engineering (ECE)</option>
+                            <option value="eee">Electrical Engineering (EEE)</option>
+                            <option value="civil">Civil Engineering (CE)</option>
+                            <option value="mech">Mechanical Engineering (ME)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="selectSemester">Select Academic Semester</label>
+                        <select id="selectSemester" class="form-control">
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3" selected>Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Calculator Form Card -->
+                <form id="sgpaForm">
+                    <div class="content-card">
+                        <div class="card-header-flex">
+                            <div>
+                                <h3 class="card-title">Subject & Grade Entry</h3>
+                                <p class="card-subtitle">Subjects are pre-populated from your curriculum. You can adjust credits, choose letter grades, or add electives.</p>
+                            </div>
+
+                            <!-- Live preview pill -->
+                            <div style="display: flex; align-items: center; gap: 14px;">
+                                <span class="badge" id="liveCreditsEl">
+                                    <span class="dot"></span>
+                                    <span id="liveTotalCredits">23 Credits</span>
+                                </span>
+                                <div style="text-align: right;">
+                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">ESTIMATED SGPA</span>
+                                    <strong style="font-size: 20px; font-family: var(--font-mono); color: var(--accent-emerald);" id="liveSGPA">9.20</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subjects Table -->
+                        <div class="table-responsive calc-table-wrap">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40px; text-align: center;">#</th>
+                                        <th>Subject Name / Title</th>
+                                        <th style="width: 130px;">Credits</th>
+                                        <th style="width: 170px;">Letter Grade</th>
+                                        <th style="width: 60px; text-align: right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subjectsTbody">
+                                    <!-- Populated dynamically by js/sgpa.js -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Actions Bar -->
+                        <div class="calc-actions-bar no-print">
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" class="btn btn-secondary btn-sm" id="addSubjectBtn">
+                                    + Add Custom Subject
+                                </button>
+                                <button type="button" class="btn btn-outline btn-sm" id="resetBtn">
+                                    ↺ Reset to Default
+                                </button>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                Calculate Semester SGPA →
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- RESULT SUMMARY MODAL -->
+    <div class="modal" id="sgpaResultModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Semester Result Card</h3>
+                <button class="modal-close-btn" data-close-modal>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="result-card-container">
+                    
+                    <div class="result-hero">
+                        <small id="resSemLabel">SEMESTER 3 RESULT • COMPUTER ENGG</small>
+                        <div class="result-score" id="resSgpaValue">8.83</div>
+                        <div class="result-class" id="resClassDiv">First Class with Distinction</div>
+                    </div>
+
+                    <div class="result-grid-summary">
+                        <div class="result-stat-box">
+                            <span>Total Credits</span>
+                            <strong id="resCreditsValue">23</strong>
+                        </div>
+                        <div class="result-stat-box">
+                            <span>Credit Points</span>
+                            <strong id="resPointsValue">203</strong>
+                        </div>
+                        <div class="result-stat-box">
+                            <span>Equivalent %</span>
+                            <strong id="resPercentValue">83.9%</strong>
+                        </div>
+                    </div>
+
+                    <div class="grade-dist-bar">
+                        <h4>Grade Performance Breakdown</h4>
+                        <div id="resGradeDistribution">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer no-print">
+                <button type="button" class="btn btn-secondary" data-close-modal>Calculate Again</button>
+                <button type="button" class="btn btn-outline" id="printResultBtn">🖨 Print Result</button>
+                <button type="button" class="btn btn-primary" id="saveResultBtn">💾 Save to My Semesters</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data/departments.js"></script>
+    <script src="data/grading.js"></script>
+    <script src="data/subjects.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/sgpa.js"></script>
+</body>
+</html>
