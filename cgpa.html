@@ -3,156 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CGPA Calculator — PolyCGPA Student Portal</title>
+    <title>Cumulative CGPA Calculator — PolyCGPA</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 
-    <div class="portal-layout">
-        <!-- Sidebar Backdrop -->
-        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-        <!-- Main Viewport -->
-        <div class="portal-main">
-            <!-- Topbar -->
-            <header class="portal-topbar">
-                <div class="topbar-left">
-                    <button class="mobile-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle menu">
-                        ☰
-                    </button>
-                    <div class="topbar-title">
-                        <h2>Cumulative CGPA Calculator</h2>
-                        <p>Calculate your weighted Cumulative Grade Point Average across multiple semesters</p>
-                    </div>
-                </div>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">Σ</span>
+            <span>Poly<span>CGPA</span></span>
+        </a>
 
-                <div class="topbar-actions">
-                    <button class="btn btn-secondary btn-sm theme-toggle-btn">
-                        <span>☀️</span> Theme
-                    </button>
-                    <a href="sgpa.html" class="btn btn-outline btn-sm">
-                        Calculate SGPA →
-                    </a>
-                </div>
-            </header>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="sgpa.html" class="nav-link">SGPA Calculator</a>
+            <a href="cgpa.html" class="nav-link active">CGPA Calculator</a>
+        </nav>
 
-            <!-- Printable Header -->
-            <div class="print-header">
-                <h2>CUMULATIVE GRADE POINT AVERAGE (CGPA) REPORT</h2>
-                <p>Polytechnic Diploma Official Academic Summary</p>
-            </div>
+        <div class="nav-actions">
+            <button class="btn btn-secondary btn-sm theme-toggle-btn" title="Toggle Theme">
+                <span>🌙</span> Dark
+            </button>
+            <div id="navAuthContainer"></div>
+        </div>
+    </header>
 
-            <!-- Main Content -->
-            <main class="portal-content">
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 28px; padding-bottom: 40px;">
+        <div style="margin-bottom: 20px;">
+            <span class="badge" style="margin-bottom: 8px;">
+                <span class="dot"></span> Cumulative CGPA Tool
+            </span>
+            <h1 style="font-size: 26px; font-weight: 800;">Cumulative Grade Point Average (CGPA)</h1>
+            <p style="color: var(--text-muted); font-size: 14px;">
+                Calculate your overall weighted CGPA across multiple semesters using official credit hours.
+            </p>
+        </div>
 
-                <!-- Actions Top Pill -->
-                <div class="selection-bar no-print" style="grid-template-columns: 1fr auto; align-items: center;">
+        <!-- Calculator Form Card -->
+        <form id="cgpaForm">
+            <div class="card">
+                <div class="card-header">
                     <div>
-                        <span style="font-size: 13px; font-weight: 700; color: var(--text-main); display: block;">Quick Auto-Load</span>
-                        <span style="font-size: 12px; color: var(--text-muted);">Import all recorded semesters directly from your student profile</span>
+                        <h3 class="card-title">Multi-Semester Grade Entry</h3>
+                        <p class="card-sub">Enter your SGPA (0.00 - 10.00) and earned credits for each semester.</p>
                     </div>
-                    <button type="button" class="btn btn-outline btn-sm" id="autoFillHistoryBtn">
-                        ⚡ Auto-fill from Saved Profile
-                    </button>
+
+                    <div style="text-align: right;">
+                        <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 600;">WEIGHTED CGPA</span>
+                        <strong style="font-size: 22px; font-family: var(--font-mono); color: var(--primary);" id="cgpaLiveScore">8.44</strong>
+                    </div>
                 </div>
 
-                <!-- CGPA Form Card -->
-                <form id="cgpaForm">
-                    <div class="content-card">
-                        <div class="card-header-flex">
-                            <div>
-                                <h3 class="card-title">Multi-Semester Grade Entry</h3>
-                                <p class="card-subtitle">Enter the SGPA and total credit hours earned for each completed semester.</p>
-                            </div>
+                <!-- Semesters Table -->
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 140px;">Semester</th>
+                                <th>Semester SGPA (0.00 - 10.00)</th>
+                                <th>Semester Credits</th>
+                                <th style="width: 130px;">Credit Points</th>
+                                <th style="width: 60px; text-align: right;" class="no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cgpaTbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
 
-                            <div style="text-align: right;">
-                                <span style="font-size: 11px; color: var(--text-muted); display: block;">WEIGHTED CGPA</span>
-                                <strong style="font-size: 24px; font-family: var(--font-mono); color: var(--accent-emerald);" id="cgpaLiveScore">8.44</strong>
-                            </div>
-                        </div>
-
-                        <!-- Semesters Table -->
-                        <div class="table-responsive calc-table-wrap">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 140px;">Semester</th>
-                                        <th>Semester SGPA (0.00 - 10.00)</th>
-                                        <th>Semester Credits</th>
-                                        <th style="width: 120px;">Credit Points</th>
-                                        <th style="width: 60px; text-align: right;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cgpaTbody">
-                                    <!-- Populated dynamically by js/cgpa.js -->
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Actions Bar -->
-                        <div class="calc-actions-bar no-print">
-                            <div style="display: flex; gap: 10px;">
-                                <button type="button" class="btn btn-secondary btn-sm" id="addSemesterRowBtn">
-                                    + Add Next Semester
-                                </button>
-                                <button type="button" class="btn btn-outline btn-sm" id="resetCgpaBtn">
-                                    ↺ Reset
-                                </button>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">
-                                Calculate Overall CGPA →
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- CGPA RESULT CARD -->
-                <div class="result-card-container" id="cgpaResultCard" style="margin-top: 28px;">
-                    <div class="result-hero">
-                        <small>CUMULATIVE ACADEMIC PERFORMANCE</small>
-                        <div class="result-score" id="cgpaResultValue">8.44</div>
-                        <div class="result-class" id="cgpaClassDivision">First Class with Distinction</div>
-                    </div>
-
-                    <div class="result-grid-summary">
-                        <div class="result-stat-box">
-                            <span>Total Completed</span>
-                            <strong id="cgpaCompletedSems">4 Semesters</strong>
-                        </div>
-                        <div class="result-stat-box">
-                            <span>Total Credits</span>
-                            <strong id="cgpaTotalCredits">86</strong>
-                        </div>
-                        <div class="result-stat-box">
-                            <span>Total Points</span>
-                            <strong id="cgpaTotalPoints">725.8</strong>
-                        </div>
-                    </div>
-
-                    <div style="background: var(--bg-surface); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Formula: Percentage = CGPA × 9.5</span>
-                            <h4 style="font-size: 16px; margin-top: 2px;">Official Equivalent Percentage: <span style="color: var(--accent-emerald);" id="cgpaPercentage">80.2%</span></h4>
-                        </div>
-                        <button type="button" class="btn btn-outline btn-sm no-print" id="printCgpaBtn">
-                            🖨 Print CGPA Summary Card
+                <!-- Actions Bar -->
+                <div class="action-bar no-print">
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-secondary btn-sm" id="addRowBtn">
+                            + Add Semester
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="resetBtn">
+                            ↺ Reset
                         </button>
                     </div>
-                </div>
 
-            </main>
+                    <button type="submit" class="btn btn-primary">
+                        Calculate Overall CGPA →
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- CGPA RESULT CARD -->
+        <div class="result-card" id="resultCard" style="display: none;">
+            <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
+                CUMULATIVE ACADEMIC PERFORMANCE
+            </div>
+            <div class="result-score" id="resultScore">8.44</div>
+            <div class="result-badge" id="resultClass">First Class with Distinction</div>
+
+            <div class="result-grid">
+                <div class="stat-box">
+                    <span>Completed Terms</span>
+                    <strong id="resultTerms">4 Semesters</strong>
+                </div>
+                <div class="stat-box">
+                    <span>Total Credits</span>
+                    <strong id="resultCredits">86</strong>
+                </div>
+                <div class="stat-box">
+                    <span>Total Points</span>
+                    <strong id="resultPoints">725.8</strong>
+                </div>
+                <div class="stat-box">
+                    <span>Equivalent %</span>
+                    <strong id="resultPercent">80.2%</strong>
+                </div>
+            </div>
+
+            <div style="margin-top: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;" class="no-print">
+                <span style="font-size: 12px; color: var(--text-muted);">
+                    Official Standard Formula: <strong>Percentage = CGPA × 9.5</strong>
+                </span>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="window.print()">
+                    🖨 Print CGPA Report
+                </button>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>PolyCGPA — Minimal Polytechnic CGPA & SGPA Calculator</p>
+    </footer>
 
     <!-- Scripts -->
-    <script src="data/departments.js"></script>
-    <script src="data/grading.js"></script>
-    <script src="data/subjects.js"></script>
     <script src="js/data.js"></script>
     <script src="js/calculator.js"></script>
-    <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
-    <script src="js/cgpa.js"></script>
+    <script>
+        const CgpaController = {
+            semesters: [
+                { id: "s1", semester: 1, sgpa: 8.20, credits: 20 },
+                { id: "s2", semester: 2, sgpa: 8.45, credits: 22 },
+                { id: "s3", semester: 3, sgpa: 8.42, credits: 21 },
+                { id: "s4", semester: 4, sgpa: 8.70, credits: 23 }
+            ],
+
+            init() {
+                this.bindEvents();
+                this.render();
+            },
+
+            bindEvents() {
+                document.getElementById("addRowBtn").addEventListener("click", () => this.addSemesterRow());
+                document.getElementById("resetBtn").addEventListener("click", () => {
+                    this.semesters = [
+                        { id: `s1_${Date.now()}`, semester: 1, sgpa: 8.20, credits: 20 },
+                        { id: `s2_${Date.now()}`, semester: 2, sgpa: 8.45, credits: 22 },
+                        { id: `s3_${Date.now()}`, semester: 3, sgpa: 8.42, credits: 21 }
+                    ];
+                    this.render();
+                    document.getElementById("resultCard").style.display = "none";
+                    App.toast("Reset semester inputs.", "info");
+                });
+
+                document.getElementById("cgpaForm").addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    this.calculateAndShowResult();
+                });
+            },
+
+            render() {
+                const tbody = document.getElementById("cgpaTbody");
+                tbody.innerHTML = this.semesters.map((sem, idx) => `
+                    <tr data-id="${sem.id}">
+                        <td style="font-weight: 600;">
+                            Semester ${idx + 1}
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" min="0" max="10" class="form-control sem-sgpa" value="${sem.sgpa}" placeholder="e.g. 8.50" required style="padding: 7px 10px;">
+                        </td>
+                        <td>
+                            <input type="number" step="1" min="1" max="50" class="form-control sem-credits" value="${sem.credits}" placeholder="e.g. 22" required style="padding: 7px 10px;">
+                        </td>
+                        <td style="font-family: var(--font-mono); font-weight: 600; color: var(--primary);" class="sem-points">
+                            ${(sem.sgpa * sem.credits).toFixed(1)}
+                        </td>
+                        <td style="text-align: right; width: 60px;" class="no-print">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="CgpaController.removeRow('${sem.id}')" title="Remove semester">✕</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                tbody.querySelectorAll(".sem-sgpa, .sem-credits").forEach(input => {
+                    input.addEventListener("input", () => this.syncAndLiveUpdate());
+                });
+
+                this.syncAndLiveUpdate();
+            },
+
+            syncAndLiveUpdate() {
+                const rows = document.querySelectorAll("#cgpaTbody tr[data-id]");
+                this.semesters = Array.from(rows).map((row, idx) => {
+                    const id = row.getAttribute("data-id");
+                    const sgpa = parseFloat(row.querySelector(".sem-sgpa")?.value) || 0;
+                    const credits = parseFloat(row.querySelector(".sem-credits")?.value) || 0;
+
+                    const previewCell = row.querySelector(".sem-points");
+                    if (previewCell) previewCell.textContent = (sgpa * credits).toFixed(1);
+
+                    return { id, semester: idx + 1, sgpa, credits };
+                });
+
+                const res = Calculator.calculateCGPA(this.semesters);
+                const liveBadge = document.getElementById("cgpaLiveScore");
+                if (liveBadge && res.isValid) {
+                    liveBadge.textContent = res.cgpa.toFixed(2);
+                }
+            },
+
+            addSemesterRow() {
+                if (this.semesters.length >= 8) {
+                    App.toast("Maximum 8 semesters supported.", "warning");
+                    return;
+                }
+
+                const nextNum = this.semesters.length + 1;
+                this.semesters.push({
+                    id: `sem_${nextNum}_${Date.now()}`,
+                    semester: nextNum,
+                    sgpa: 8.50,
+                    credits: 22
+                });
+
+                this.render();
+                App.toast(`Semester ${nextNum} row added.`, "info");
+            },
+
+            removeRow(id) {
+                if (this.semesters.length <= 1) {
+                    App.toast("At least one semester is required.", "warning");
+                    return;
+                }
+                this.semesters = this.semesters.filter(s => s.id !== id);
+                this.render();
+            },
+
+            calculateAndShowResult() {
+                this.syncAndLiveUpdate();
+                const res = Calculator.calculateCGPA(this.semesters);
+
+                if (!res.isValid) {
+                    App.toast(res.error || "Please check semester inputs.", "error");
+                    return;
+                }
+
+                document.getElementById("resultScore").textContent = res.cgpa.toFixed(2);
+                document.getElementById("resultClass").textContent = res.academicClass;
+                document.getElementById("resultTerms").textContent = `${res.completedSemesters} Semesters`;
+                document.getElementById("resultCredits").textContent = res.totalCredits;
+                document.getElementById("resultPoints").textContent = res.totalPoints.toFixed(1);
+                document.getElementById("resultPercent").textContent = `${res.percentage}%`;
+
+                const resultCard = document.getElementById("resultCard");
+                resultCard.style.display = "block";
+                resultCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+                App.toast(`Overall CGPA: ${res.cgpa.toFixed(2)} (${res.academicClass})`, "success");
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            CgpaController.init();
+        });
+    </script>
 </body>
 </html>

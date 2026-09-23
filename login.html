@@ -1,267 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal Access — PolyCGPA</title>
+    <title>Sign In — PolyCGPA</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 
-    <div class="auth-wrapper">
-        <!-- Top Navbar Minimal -->
-        <header class="navbar" style="height: 70px;">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">Σ</span>
-                <span>Poly<span>CGPA</span></span>
-            </a>
-            <div class="nav-actions">
-                <button class="btn btn-secondary btn-sm theme-toggle-btn">
-                    <span>☀️</span> Theme
+    <div class="login-wrap">
+        <div class="login-card">
+            <div style="text-align: center; margin-bottom: 24px;">
+                <a href="index.html" class="logo" style="justify-content: center; margin-bottom: 14px;">
+                    <span class="logo-icon">Σ</span>
+                    <span>Poly<span>CGPA</span></span>
+                </a>
+                <h1 style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Student Sign In</h1>
+                <p style="font-size: 13px; color: var(--text-muted);">Enter your username and password to continue</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="e.g. rahul" required autofocus>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 22px;">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Sign In →
                 </button>
-                <a href="index.html" class="btn btn-outline btn-sm">
-                    Back to Home
+            </form>
+
+            <div style="text-align: center; margin-top: 18px;">
+                <a href="index.html" style="font-size: 13px; color: var(--text-muted);">
+                    ← Back to Home
                 </a>
             </div>
-        </header>
-
-        <!-- Main Auth Container -->
-        <main class="auth-container">
-            <div class="auth-brand">
-                <div class="badge" style="margin-bottom: 12px;">
-                    <span class="dot"></span> Student Portal Access
-                </div>
-                <h2>Welcome to PolyCGPA</h2>
-                <p>Sign in to access your saved semester results and GPA analytics</p>
-            </div>
-
-            <div class="auth-card">
-                <!-- Error Alert -->
-                <div class="auth-error-banner" id="authErrorBanner">
-                    <span>⚠</span> <span id="authErrorMsg">Invalid credentials. Please try again.</span>
-                </div>
-
-                <!-- Tabs: Login / Register -->
-                <div class="auth-tabs">
-                    <button class="auth-tab-btn active" id="tabLoginBtn" type="button">
-                        Student Login
-                    </button>
-                    <button class="auth-tab-btn" id="tabRegisterBtn" type="button">
-                        New Registration
-                    </button>
-                </div>
-
-                <!-- LOGIN FORM -->
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="loginIdentifier">Student ID or Email <span>*</span></label>
-                        <input type="text" id="loginIdentifier" class="form-control" placeholder="e.g. POLY2024-CSE-042 or student@poly.edu" required autofocus>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="loginPassword">Password <span>*</span></label>
-                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
-                    </div>
-
-                    <div class="form-options">
-                        <label class="remember-me">
-                            <input type="checkbox" id="rememberMe" checked>
-                            <span>Remember me</span>
-                        </label>
-                        <a href="#" class="forgot-link" id="forgotPasswordBtn">Forgot Password?</a>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                        Sign In to Portal →
-                    </button>
-
-                    <div class="demo-account-box">
-                        <p>Want to test with preloaded semester grade cards?</p>
-                        <button type="button" class="btn btn-outline btn-sm" id="demoLoginBtn" style="width: 100%;">
-                            ⚡ Quick 1-Click Demo Login (Aarav - CSE)
-                        </button>
-                    </div>
-                </form>
-
-                <!-- REGISTER FORM -->
-                <form id="registerForm" style="display: none;">
-                    <div class="form-group">
-                        <label for="regName">Full Student Name <span>*</span></label>
-                        <input type="text" id="regName" class="form-control" placeholder="e.g. Rahul Sharma" required>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="regId">Student Roll / ID <span>*</span></label>
-                            <input type="text" id="regId" class="form-control" placeholder="e.g. 2024-CSE-045" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regEmail">Email Address <span>*</span></label>
-                            <input type="email" id="regEmail" class="form-control" placeholder="rahul@polytechnic.edu" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="regDept">Department <span>*</span></label>
-                            <select id="regDept" class="form-control" required>
-                                <option value="cse">Computer Engineering (CSE)</option>
-                                <option value="ece">Electronics Engineering (ECE)</option>
-                                <option value="eee">Electrical Engineering (EEE)</option>
-                                <option value="civil">Civil Engineering (CE)</option>
-                                <option value="mech">Mechanical Engineering (ME)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="regSemester">Current Semester <span>*</span></label>
-                            <select id="regSemester" class="form-control" required>
-                                <option value="1">Semester 1</option>
-                                <option value="2">Semester 2</option>
-                                <option value="3" selected>Semester 3</option>
-                                <option value="4">Semester 4</option>
-                                <option value="5">Semester 5</option>
-                                <option value="6">Semester 6</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="regCollege">Polytechnic / College Name</label>
-                        <input type="text" id="regCollege" class="form-control" placeholder="e.g. Government Polytechnic College">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="regPassword">Create Password <span>*</span></label>
-                        <input type="password" id="regPassword" class="form-control" placeholder="At least 6 characters" required minlength="6">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
-                        Create Student Account →
-                    </button>
-                </form>
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer style="border-top: none; padding: 20px;">
-            <p style="text-align: center; width: 100%;">
-                PolyCGPA Calculator Portal • All data is stored locally in your browser.
-            </p>
-        </footer>
+        </div>
     </div>
 
     <!-- Scripts -->
-    <script src="data/departments.js"></script>
-    <script src="data/grading.js"></script>
-    <script src="data/subjects.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/calculator.js"></script>
-    <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
-
     <script>
-        // Check if already logged in -> redirect to dashboard
-        if (AuthService.getCurrentUser()) {
-            const params = new URLSearchParams(window.location.search);
-            if (!params.get('logout')) {
-                window.location.href = "dashboard.html";
-            }
-        }
-
-        // Tab Switching
-        const tabLoginBtn = document.getElementById('tabLoginBtn');
-        const tabRegisterBtn = document.getElementById('tabRegisterBtn');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const errorBanner = document.getElementById('authErrorBanner');
-        const errorMsg = document.getElementById('authErrorMsg');
-
-        function showError(msg) {
-            errorMsg.textContent = msg;
-            errorBanner.classList.add('show');
-        }
-
-        function hideError() {
-            errorBanner.classList.remove('show');
-        }
-
-        tabLoginBtn.addEventListener('click', () => {
-            tabLoginBtn.classList.add('active');
-            tabRegisterBtn.classList.remove('active');
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            hideError();
-        });
-
-        tabRegisterBtn.addEventListener('click', () => {
-            tabRegisterBtn.classList.add('active');
-            tabLoginBtn.classList.remove('active');
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            hideError();
-        });
-
-        // Handle Login Submission
-        loginForm.addEventListener('submit', (e) => {
+        document.getElementById("loginForm").addEventListener("submit", function(e) {
             e.preventDefault();
-            hideError();
-
-            const identifier = document.getElementById('loginIdentifier').value;
-            const password = document.getElementById('loginPassword').value;
-
-            const res = AuthService.login(identifier, password);
-            if (res.success) {
-                App.toast("Login successful! Welcome back.", "success");
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 400);
-            } else {
-                showError(res.error || "Invalid username or password.");
+            const username = document.getElementById("username").value.trim();
+            if (username) {
+                localStorage.setItem("polycgpa_user", username);
+                window.location.href = "index.html";
             }
-        });
-
-        // Handle Register Submission
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            hideError();
-
-            const studentData = {
-                name: document.getElementById('regName').value,
-                id: document.getElementById('regId').value,
-                email: document.getElementById('regEmail').value,
-                department: document.getElementById('regDept').value,
-                semester: document.getElementById('regSemester').value,
-                college: document.getElementById('regCollege').value,
-                password: document.getElementById('regPassword').value
-            };
-
-            const res = AuthService.register(studentData);
-            if (res.success) {
-                App.toast("Account created successfully!", "success");
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 400);
-            } else {
-                showError(res.error || "Registration failed. Please check inputs.");
-            }
-        });
-
-        // Demo Login
-        document.getElementById('demoLoginBtn').addEventListener('click', () => {
-            const res = AuthService.loginDemo();
-            if (res.success) {
-                App.toast("Logged in as Demo Student!", "success");
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 400);
-            }
-        });
-
-        // Forgot password notice
-        document.getElementById('forgotPasswordBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            alert("For local accounts, you can use the 1-Click Demo Login or re-register with your email. Demo credentials:\nEmail: aarav.sharma@polytechnic.edu\nPassword: password123");
         });
     </script>
 </body>

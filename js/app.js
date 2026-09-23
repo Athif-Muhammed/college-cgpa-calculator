@@ -1,23 +1,22 @@
 /**
- * PolyCGPA Global App Utilities & UI Helpers
+ * PolyCGPA - App Utilities, Theme Controller & Auth Helper
+ * Lightweight, zero-dependency helper for theme toggling, auth session, and notifications.
  */
 
 const App = {
     init() {
         this.initTheme();
-        this.initMobileSidebar();
-        this.initUserHeader();
-        this.initModals();
+        this.initAuthUI();
         this.highlightActiveNav();
     },
 
     // -------------------------------------------------------------
-    // THEME MANAGEMENT (Dark / Mint Light)
+    // THEME MANAGEMENT (Light by default, Dark toggle)
     // -------------------------------------------------------------
     initTheme() {
-        const savedTheme = localStorage.getItem("polycgpa_theme") || "dark";
-        if (savedTheme === "light") {
-            document.documentElement.setAttribute("data-theme", "light");
+        const savedTheme = localStorage.getItem("polycgpa_theme") || "light";
+        if (savedTheme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
         } else {
             document.documentElement.removeAttribute("data-theme");
         }
@@ -30,11 +29,11 @@ const App = {
     },
 
     toggleTheme() {
-        const isLight = document.documentElement.getAttribute("data-theme") === "light";
-        const newTheme = isLight ? "dark" : "light";
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const newTheme = isDark ? "light" : "dark";
 
-        if (newTheme === "light") {
-            document.documentElement.setAttribute("data-theme", "light");
+        if (newTheme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
         } else {
             document.documentElement.removeAttribute("data-theme");
         }
@@ -48,78 +47,59 @@ const App = {
 
     updateThemeButton(btn, theme) {
         if (!btn) return;
-        btn.innerHTML = theme === "light" 
-            ? '<span>🌙</span> Dark Mode' 
-            : '<span>☀️</span> Light Mode';
+        btn.innerHTML = theme === "dark" 
+            ? '<span>☀️</span> Light' 
+            : '<span>🌙</span> Dark';
     },
 
     // -------------------------------------------------------------
-    // MOBILE NAVIGATION DRAWER
+    // SIMPLE AUTH / USER SESSION UI
     // -------------------------------------------------------------
-    initMobileSidebar() {
-        const toggleBtn = document.getElementById("sidebarToggleBtn");
-        const sidebar = document.querySelector(".portal-sidebar");
-        const backdrop = document.getElementById("sidebarBackdrop");
+    initAuthUI() {
+        const authContainer = document.getElementById("navAuthContainer");
+        if (!authContainer) return;
 
-        if (toggleBtn && sidebar) {
-            toggleBtn.addEventListener("click", () => {
-                sidebar.classList.toggle("open");
-                if (backdrop) backdrop.classList.toggle("show");
-            });
+        const user = localStorage.getItem("polycgpa_user");
+        if (user) {
+            authContainer.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 13px; font-weight: 600; color: var(--text-main);">👤 ${this.escapeHTML(user)}</span>
+                    <button class="btn btn-secondary btn-sm" id="signOutBtn" title="Sign Out">
+                        Sign Out
+                    </button>
+                </div>
+            `;
+            const signOutBtn = document.getElementById("signOutBtn");
+            if (signOutBtn) {
+                signOutBtn.addEventListener("click", () => {
+                    localStorage.removeItem("polycgpa_user");
+                    this.initAuthUI();
+                    this.toast("Signed out successfully", "info");
+                });
+            }
+        } else {
+            authContainer.innerHTML = `
+                <a href="login.html" class="btn btn-primary btn-sm">
+                    Sign In
+                </a>
+            `;
         }
+    },
 
-        if (backdrop) {
-            backdrop.addEventListener("click", () => {
-                if (sidebar) sidebar.classList.remove("open");
-                backdrop.classList.remove("show");
-            });
-        }
+    escapeHTML(str) {
+        const p = document.createElement("p");
+        p.appendChild(document.createTextNode(str));
+        return p.innerHTML;
     },
 
     // -------------------------------------------------------------
-    // USER HEADER BINDING
-    // -------------------------------------------------------------
-    initUserHeader() {
-        if (typeof AuthService === 'undefined') return;
-        const user = AuthService.getCurrentUser();
-        if (!user) return;
-
-        // Populate avatar initials & student name
-        const nameEls = document.querySelectorAll(".current-user-name");
-        const deptEls = document.querySelectorAll(".current-user-dept");
-        const semEls = document.querySelectorAll(".current-user-sem");
-        const avatarEls = document.querySelectorAll(".user-avatar");
-
-        const initials = user.name ? user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) : "ST";
-        const deptObj = typeof DataService !== 'undefined' ? DataService.getDepartmentById(user.department) : null;
-        const deptName = deptObj ? deptObj.name : (user.department || "Polytechnic");
-
-        nameEls.forEach(el => el.textContent = user.name);
-        deptEls.forEach(el => el.textContent = deptName);
-        semEls.forEach(el => el.textContent = `Semester ${user.semester || 1}`);
-        avatarEls.forEach(el => {
-            el.textContent = initials;
-            el.setAttribute("title", user.name);
-        });
-
-        // Logout triggers
-        const logoutBtns = document.querySelectorAll(".logout-btn");
-        logoutBtns.forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                AuthService.logout();
-            });
-        });
-    },
-
-    // -------------------------------------------------------------
-    // ACTIVE NAV LINK HIGHLIGHTER
+    // ACTIVE NAV HIGHLIGHT
     // -------------------------------------------------------------
     highlightActiveNav() {
         const path = window.location.pathname;
         const page = path.split("/").pop() || "index.html";
 
-        const navLinks = document.querySelectorAll(".nav-link, .sidebar-nav a");
+        const navLinks = document.querySelectorAll(".nav-link");
         navLinks.forEach(link => {
             const href = link.getAttribute("href");
             if (href && (href === page || (page === "" && href === "index.html"))) {
@@ -129,39 +109,7 @@ const App = {
     },
 
     // -------------------------------------------------------------
-    // MODALS SETUP
-    // -------------------------------------------------------------
-    initModals() {
-        const closeBtns = document.querySelectorAll("[data-close-modal]");
-        closeBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                const modal = btn.closest(".modal");
-                if (modal) modal.classList.remove("active");
-            });
-        });
-
-        // Click outside modal content to close
-        document.querySelectorAll(".modal").forEach(modal => {
-            modal.addEventListener("click", (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove("active");
-                }
-            });
-        });
-    },
-
-    openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.classList.add("active");
-    },
-
-    closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.classList.remove("active");
-    },
-
-    // -------------------------------------------------------------
-    // TOAST NOTIFICATION SYSTEM
+    // TOAST NOTIFICATIONS
     // -------------------------------------------------------------
     toast(message, type = "success") {
         let container = document.getElementById("toast-container");
@@ -188,14 +136,11 @@ const App = {
 
         container.appendChild(toast);
 
-        setTimeout(() => {
-            toast.classList.add("show");
-        }, 10);
-
+        setTimeout(() => toast.classList.add("show"), 10);
         setTimeout(() => {
             toast.classList.remove("show");
             setTimeout(() => toast.remove(), 300);
-        }, 3500);
+        }, 3000);
     }
 };
 

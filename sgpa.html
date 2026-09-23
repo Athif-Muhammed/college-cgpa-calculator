@@ -3,194 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGPA Calculator — PolyCGPA Student Portal</title>
+    <title>Semester SGPA Calculator — PolyCGPA</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 
-    <div class="portal-layout">
-        <!-- Sidebar Backdrop -->
-        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-        <!-- Main Viewport -->
-        <div class="portal-main">
-            <!-- Topbar -->
-            <header class="portal-topbar">
-                <div class="topbar-left">
-                    <button class="mobile-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle menu">
-                        ☰
-                    </button>
-                    <div class="topbar-title">
-                        <h2>Semester SGPA Calculator</h2>
-                        <p>Calculate your semester Grade Point Average using official polytechnic curricula</p>
-                    </div>
-                </div>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">Σ</span>
+            <span>Poly<span>CGPA</span></span>
+        </a>
 
-                <div class="topbar-actions">
-                    <button class="btn btn-secondary btn-sm theme-toggle-btn">
-                        <span>☀️</span> Theme
-                    </button>
-                    <a href="cgpa.html" class="btn btn-outline btn-sm">
-                        CGPA Calculator →
-                    </a>
-                </div>
-            </header>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="sgpa.html" class="nav-link active">SGPA Calculator</a>
+            <a href="cgpa.html" class="nav-link">CGPA Calculator</a>
+        </nav>
 
-            <!-- Printable Header for paper export -->
-            <div class="print-header">
-                <h2>STATE BOARD OF TECHNICAL EDUCATION</h2>
-                <h3>POLYTECHNIC SEMESTER GRADE REPORT</h3>
-                <p>Calculated via PolyCGPA Student Portal</p>
+        <div class="nav-actions">
+            <button class="btn btn-secondary btn-sm theme-toggle-btn" title="Toggle Theme">
+                <span>🌙</span> Dark
+            </button>
+            <div id="navAuthContainer"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 28px; padding-bottom: 40px;">
+        <div style="margin-bottom: 20px;">
+            <span class="badge" style="margin-bottom: 8px;">
+                <span class="dot"></span> Semester SGPA Tool
+            </span>
+            <h1 style="font-size: 26px; font-weight: 800;">Semester Grade Point Average (SGPA)</h1>
+            <p style="color: var(--text-muted); font-size: 14px;">
+                Select your engineering branch and semester to load standard polytechnic subjects or enter custom courses.
+            </p>
+        </div>
+
+        <!-- Branch & Semester Selection -->
+        <div class="filter-bar no-print">
+            <div>
+                <label for="selectDepartment" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Branch / Department</label>
+                <select id="selectDepartment" class="form-control">
+                    <option value="cse">Computer Engineering (CSE)</option>
+                    <option value="ece">Electronics Engineering (ECE)</option>
+                    <option value="eee">Electrical Engineering (EEE)</option>
+                    <option value="civil">Civil Engineering (CE)</option>
+                    <option value="mech">Mechanical Engineering (ME)</option>
+                </select>
             </div>
 
-            <!-- Main Content -->
-            <main class="portal-content">
+            <div>
+                <label for="selectSemester" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Academic Semester</label>
+                <select id="selectSemester" class="form-control">
+                    <option value="1">Semester 1</option>
+                    <option value="2">Semester 2</option>
+                    <option value="3" selected>Semester 3</option>
+                    <option value="4">Semester 4</option>
+                    <option value="5">Semester 5</option>
+                    <option value="6">Semester 6</option>
+                </select>
+            </div>
+        </div>
 
-                <!-- Department & Semester Selection -->
-                <div class="selection-bar no-print">
+        <!-- Calculator Form -->
+        <form id="sgpaForm">
+            <div class="card">
+                <div class="card-header">
                     <div>
-                        <label for="selectDepartment">Select Department / Branch</label>
-                        <select id="selectDepartment" class="form-control">
-                            <option value="cse">Computer Engineering (CSE)</option>
-                            <option value="ece">Electronics Engineering (ECE)</option>
-                            <option value="eee">Electrical Engineering (EEE)</option>
-                            <option value="civil">Civil Engineering (CE)</option>
-                            <option value="mech">Mechanical Engineering (ME)</option>
-                        </select>
+                        <h3 class="card-title">Subject & Grade Entry</h3>
+                        <p class="card-sub">Adjust credit values, choose letter grades, or add elective subjects.</p>
                     </div>
 
-                    <div>
-                        <label for="selectSemester">Select Academic Semester</label>
-                        <select id="selectSemester" class="form-control">
-                            <option value="1">Semester 1</option>
-                            <option value="2">Semester 2</option>
-                            <option value="3" selected>Semester 3</option>
-                            <option value="4">Semester 4</option>
-                            <option value="5">Semester 5</option>
-                            <option value="6">Semester 6</option>
-                        </select>
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <span class="badge" id="creditsBadge">23 Credits</span>
+                        <div style="text-align: right;">
+                            <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 600;">ESTIMATED SGPA</span>
+                            <strong style="font-size: 20px; font-family: var(--font-mono); color: var(--primary);" id="liveSgpa">9.13</strong>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Calculator Form Card -->
-                <form id="sgpaForm">
-                    <div class="content-card">
-                        <div class="card-header-flex">
-                            <div>
-                                <h3 class="card-title">Subject & Grade Entry</h3>
-                                <p class="card-subtitle">Subjects are pre-populated from your curriculum. You can adjust credits, choose letter grades, or add electives.</p>
-                            </div>
+                <!-- Subjects Table -->
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;">#</th>
+                                <th>Subject Name</th>
+                                <th style="width: 140px;">Credits</th>
+                                <th style="width: 180px;">Letter Grade</th>
+                                <th style="width: 60px; text-align: right;" class="no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subjectsTbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
 
-                            <!-- Live preview pill -->
-                            <div style="display: flex; align-items: center; gap: 14px;">
-                                <span class="badge" id="liveCreditsEl">
-                                    <span class="dot"></span>
-                                    <span id="liveTotalCredits">23 Credits</span>
-                                </span>
-                                <div style="text-align: right;">
-                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">ESTIMATED SGPA</span>
-                                    <strong style="font-size: 20px; font-family: var(--font-mono); color: var(--accent-emerald);" id="liveSGPA">9.20</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Subjects Table -->
-                        <div class="table-responsive calc-table-wrap">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 40px; text-align: center;">#</th>
-                                        <th>Subject Name / Title</th>
-                                        <th style="width: 130px;">Credits</th>
-                                        <th style="width: 170px;">Letter Grade</th>
-                                        <th style="width: 60px; text-align: right;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="subjectsTbody">
-                                    <!-- Populated dynamically by js/sgpa.js -->
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Actions Bar -->
-                        <div class="calc-actions-bar no-print">
-                            <div style="display: flex; gap: 10px;">
-                                <button type="button" class="btn btn-secondary btn-sm" id="addSubjectBtn">
-                                    + Add Custom Subject
-                                </button>
-                                <button type="button" class="btn btn-outline btn-sm" id="resetBtn">
-                                    ↺ Reset to Default
-                                </button>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">
-                                Calculate Semester SGPA →
-                            </button>
-                        </div>
+                <!-- Actions Bar -->
+                <div class="action-bar no-print">
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn btn-secondary btn-sm" id="addSubjectBtn">
+                            + Add Subject
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="resetBtn">
+                            ↺ Reset
+                        </button>
                     </div>
-                </form>
 
-            </main>
-        </div>
-    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Calculate SGPA →
+                    </button>
+                </div>
+            </div>
+        </form>
+    </main>
 
-    <!-- RESULT SUMMARY MODAL -->
-    <div class="modal" id="sgpaResultModal">
+    <!-- RESULT MODAL -->
+    <div class="modal" id="resultModal">
         <div class="modal-dialog">
             <div class="modal-header">
-                <h3>Semester Result Card</h3>
-                <button class="modal-close-btn" data-close-modal>&times;</button>
+                <h3 class="card-title">Semester Result Summary</h3>
+                <button type="button" class="modal-close" data-close-modal>&times;</button>
             </div>
             <div class="modal-body">
-                <div class="result-card-container">
-                    
-                    <div class="result-hero">
-                        <small id="resSemLabel">SEMESTER 3 RESULT • COMPUTER ENGG</small>
-                        <div class="result-score" id="resSgpaValue">8.83</div>
-                        <div class="result-class" id="resClassDiv">First Class with Distinction</div>
+                <div class="result-card" style="margin-top: 0;">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;" id="resultDeptLabel">
+                        SEMESTER 3 • COMPUTER ENGG
                     </div>
+                    <div class="result-score" id="resultScore">8.83</div>
+                    <div class="result-badge" id="resultClass">First Class with Distinction</div>
 
-                    <div class="result-grid-summary">
-                        <div class="result-stat-box">
+                    <div class="result-grid">
+                        <div class="stat-box">
                             <span>Total Credits</span>
-                            <strong id="resCreditsValue">23</strong>
+                            <strong id="resultCredits">23</strong>
                         </div>
-                        <div class="result-stat-box">
-                            <span>Credit Points</span>
-                            <strong id="resPointsValue">203</strong>
+                        <div class="stat-box">
+                            <span>Total Points</span>
+                            <strong id="resultPoints">203.0</strong>
                         </div>
-                        <div class="result-stat-box">
-                            <span>Equivalent %</span>
-                            <strong id="resPercentValue">83.9%</strong>
-                        </div>
-                    </div>
-
-                    <div class="grade-dist-bar">
-                        <h4>Grade Performance Breakdown</h4>
-                        <div id="resGradeDistribution">
-                            <!-- Populated dynamically -->
+                        <div class="stat-box">
+                            <span>Percentage</span>
+                            <strong id="resultPercent">83.9%</strong>
                         </div>
                     </div>
-
                 </div>
             </div>
-
             <div class="modal-footer no-print">
-                <button type="button" class="btn btn-secondary" data-close-modal>Calculate Again</button>
-                <button type="button" class="btn btn-outline" id="printResultBtn">🖨 Print Result</button>
-                <button type="button" class="btn btn-primary" id="saveResultBtn">💾 Save to My Semesters</button>
+                <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
+                <button type="button" class="btn btn-primary" onclick="window.print()">🖨 Print Result</button>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <p>PolyCGPA — Minimal Polytechnic CGPA & SGPA Calculator</p>
+    </footer>
+
     <!-- Scripts -->
-    <script src="data/departments.js"></script>
-    <script src="data/grading.js"></script>
-    <script src="data/subjects.js"></script>
     <script src="js/data.js"></script>
     <script src="js/calculator.js"></script>
-    <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
-    <script src="js/sgpa.js"></script>
+    <script>
+        const SgpaController = {
+            currentDept: "cse",
+            currentSem: 3,
+            subjects: [],
+
+            init() {
+                const deptSelect = document.getElementById("selectDepartment");
+                const semSelect = document.getElementById("selectSemester");
+
+                if (deptSelect) deptSelect.value = this.currentDept;
+                if (semSelect) semSelect.value = this.currentSem;
+
+                this.bindEvents();
+                this.loadCurriculum();
+            },
+
+            bindEvents() {
+                document.getElementById("selectDepartment").addEventListener("change", (e) => {
+                    this.currentDept = e.target.value;
+                    this.loadCurriculum();
+                });
+
+                document.getElementById("selectSemester").addEventListener("change", (e) => {
+                    this.currentSem = parseInt(e.target.value, 10);
+                    this.loadCurriculum();
+                });
+
+                document.getElementById("addSubjectBtn").addEventListener("click", () => {
+                    this.addCustomSubject();
+                });
+
+                document.getElementById("resetBtn").addEventListener("click", () => {
+                    this.loadCurriculum();
+                    App.toast("Reset to official curriculum subjects.", "info");
+                });
+
+                document.getElementById("sgpaForm").addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    this.calculateAndOpenModal();
+                });
+
+                document.querySelectorAll("[data-close-modal]").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        document.getElementById("resultModal").classList.remove("active");
+                    });
+                });
+            },
+
+            loadCurriculum() {
+                const raw = DataService.getSubjects(this.currentDept, this.currentSem);
+                this.subjects = raw.map((s, idx) => ({
+                    id: `sub_${idx}_${Date.now()}`,
+                    name: s.name,
+                    code: s.code || "",
+                    credits: s.credits || 4,
+                    grade: "A+",
+                    points: 10
+                }));
+
+                this.render();
+            },
+
+            render() {
+                const tbody = document.getElementById("subjectsTbody");
+                const gradingScale = DataService.getGradingScale();
+
+                if (this.subjects.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                                No subjects found. Click "+ Add Subject" to add courses.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tbody.innerHTML = this.subjects.map((s, idx) => `
+                    <tr data-id="${s.id}">
+                        <td style="text-align: center; font-weight: 600; color: var(--text-muted);">${idx + 1}</td>
+                        <td>
+                            <input type="text" class="form-control course-name" value="${s.name}" placeholder="Course Title" required style="padding: 7px 10px;">
+                            ${s.code ? `<small style="color:var(--text-muted); display:block; margin-top:2px;">Code: ${s.code}</small>` : ''}
+                        </td>
+                        <td style="width: 140px;">
+                            <select class="form-control course-credits" style="padding: 7px 10px;">
+                                <option value="1" ${s.credits === 1 ? 'selected' : ''}>1 Credit</option>
+                                <option value="2" ${s.credits === 2 ? 'selected' : ''}>2 Credits (Lab)</option>
+                                <option value="3" ${s.credits === 3 ? 'selected' : ''}>3 Credits</option>
+                                <option value="4" ${s.credits === 4 ? 'selected' : ''}>4 Credits (Core)</option>
+                                <option value="5" ${s.credits === 5 ? 'selected' : ''}>5 Credits</option>
+                                <option value="6" ${s.credits === 6 ? 'selected' : ''}>6 Credits (Project)</option>
+                            </select>
+                        </td>
+                        <td style="width: 180px;">
+                            <select class="form-control course-grade" style="padding: 7px 10px;">
+                                ${gradingScale.map(g => `
+                                    <option value="${g.alias || g.grade}" data-points="${g.points}" ${g.points === s.points ? 'selected' : ''}>
+                                        ${g.label} (${g.points} pts)
+                                    </option>
+                                `).join('')}
+                            </select>
+                        </td>
+                        <td style="text-align: right; width: 60px;" class="no-print">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="SgpaController.removeSubject('${s.id}')" title="Remove course">✕</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                tbody.querySelectorAll(".course-name, .course-credits, .course-grade").forEach(el => {
+                    el.addEventListener("change", () => this.syncAndLiveUpdate());
+                });
+
+                this.syncAndLiveUpdate();
+            },
+
+            syncAndLiveUpdate() {
+                const rows = document.querySelectorAll("#subjectsTbody tr[data-id]");
+                this.subjects = Array.from(rows).map(row => {
+                    const id = row.getAttribute("data-id");
+                    const name = row.querySelector(".course-name")?.value || "Course";
+                    const credits = parseFloat(row.querySelector(".course-credits")?.value) || 0;
+                    const gradeSel = row.querySelector(".course-grade");
+                    const grade = gradeSel ? gradeSel.value : "A+";
+                    const points = gradeSel ? (parseFloat(gradeSel.options[gradeSel.selectedIndex]?.getAttribute("data-points")) || 0) : 0;
+                    return { id, name, credits, grade, points };
+                });
+
+                const res = Calculator.calculateSGPA(this.subjects);
+                document.getElementById("creditsBadge").textContent = `${res.totalCredits} Credits`;
+                document.getElementById("liveSgpa").textContent = res.isValid ? res.sgpa.toFixed(2) : "0.00";
+            },
+
+            addCustomSubject() {
+                this.subjects.push({
+                    id: `custom_${Date.now()}`,
+                    name: `Course ${this.subjects.length + 1}`,
+                    code: "",
+                    credits: 3,
+                    grade: "A",
+                    points: 9
+                });
+                this.render();
+                App.toast("Subject added.", "info");
+            },
+
+            removeSubject(id) {
+                if (this.subjects.length <= 1) {
+                    App.toast("At least one subject is required.", "warning");
+                    return;
+                }
+                this.subjects = this.subjects.filter(s => s.id !== id);
+                this.render();
+            },
+
+            calculateAndOpenModal() {
+                this.syncAndLiveUpdate();
+                const res = Calculator.calculateSGPA(this.subjects);
+
+                if (!res.isValid) {
+                    App.toast(res.error || "Please check subject inputs.", "error");
+                    return;
+                }
+
+                const deptObj = DataService.getDepartmentById(this.currentDept);
+                const deptTitle = deptObj ? deptObj.name.toUpperCase() : "POLYTECHNIC";
+
+                document.getElementById("resultDeptLabel").textContent = `SEMESTER ${this.currentSem} • ${deptTitle}`;
+                document.getElementById("resultScore").textContent = res.sgpa.toFixed(2);
+                document.getElementById("resultClass").textContent = res.academicClass;
+                document.getElementById("resultCredits").textContent = res.totalCredits;
+                document.getElementById("resultPoints").textContent = res.totalPoints.toFixed(1);
+                document.getElementById("resultPercent").textContent = `${res.percentage}%`;
+
+                const modal = document.getElementById("resultModal");
+                if (modal) modal.classList.add("active");
+                App.toast(`Semester SGPA: ${res.sgpa.toFixed(2)} (${res.academicClass})`, "success");
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            SgpaController.init();
+        });
+    </script>
 </body>
 </html>
