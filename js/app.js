@@ -91,57 +91,6 @@ const App = {
         p.appendChild(document.createTextNode(str));
         return p.innerHTML;
     },
-
-    // -------------------------------------------------------------
-    // ACTIVE NAV HIGHLIGHT
-    // -------------------------------------------------------------
-    highlightActiveNav() {
-        const path = window.location.pathname;
-        const page = path.split("/").pop() || "index.html";
-
-        const navLinks = document.querySelectorAll(".nav-link");
-        navLinks.forEach(link => {
-            const href = link.getAttribute("href");
-            if (href && (href === page || (page === "" && href === "index.html"))) {
-                link.classList.add("active");
-            }
-        });
-    },
-
-    // -------------------------------------------------------------
-    // TOAST NOTIFICATIONS
-    // -------------------------------------------------------------
-    toast(message, type = "success") {
-        let container = document.getElementById("toast-container");
-        if (!container) {
-            container = document.createElement("div");
-            container.id = "toast-container";
-            container.className = "toast-container";
-            document.body.appendChild(container);
-        }
-
-        const icons = {
-            success: "✓",
-            error: "✕",
-            info: "ℹ",
-            warning: "⚠"
-        };
-
-        const toast = document.createElement("div");
-        toast.className = `toast toast-${type}`;
-        toast.innerHTML = `
-            <span class="toast-icon">${icons[type] || "✓"}</span>
-            <span class="toast-text">${message}</span>
-        `;
-
-        container.appendChild(toast);
-
-        setTimeout(() => toast.classList.add("show"), 10);
-        setTimeout(() => {
-            toast.classList.remove("show");
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
