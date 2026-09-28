@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolyCGPA — Polytechnic SGPA & CGPA Calculator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">Σ</span>
+            <span>Poly<span>CGPA</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="sgpa.html" class="nav-link">SGPA Calculator</a>
+            <a href="cgpa.html" class="nav-link">CGPA Calculator</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div id="navAuthContainer"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-badge">
+                <span class="badge">
+                    <span class="dot"></span> Polytechnic & Technical Diploma
+                </span>
+            </div>
+            <h1>Polytechnic <span>SGPA & CGPA</span> Calculator</h1>
+            <p>
+                A simple and accurate tool to calculate your semester Grade Point Average (SGPA) 
+                and Cumulative Grade Point Average (CGPA) based on official polytechnic grading systems.
+            </p>
+        </section>
+
+        <!-- Two Main Calculator Option Cards -->
+        <section class="grid-2">
+            <!-- SGPA Card -->
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div class="card-icon">
+                        📘
+                    </div>
+                    <h2 class="card-title" style="font-size: 19px; margin-bottom: 8px;">Semester SGPA Calculator</h2>
+                    <p class="card-sub" style="font-size: 14px; line-height: 1.5; margin-bottom: 16px;">
+                        Calculate your Grade Point Average for a single semester. Preloaded with subjects for Computer, Electronics, Electrical, Civil, and Mechanical branches.
+                    </p>
+                    <ul class="feature-list">
+                        <li>✓ Pre-filled official subjects & credits</li>
+                        <li>✓ Add custom elective subjects</li>
+                        <li>✓ Instant equivalent percentage & division</li>
+                    </ul>
+                </div>
+                <a href="sgpa.html" class="btn btn-primary" style="width: 100%;">
+                    Calculate Semester SGPA →
+                </a>
+            </div>
+
+            <!-- CGPA Card -->
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div class="card-icon">
+                        🎓
+                    </div>
+                    <h2 class="card-title" style="font-size: 19px; margin-bottom: 8px;">Cumulative CGPA Calculator</h2>
+                    <p class="card-sub" style="font-size: 14px; line-height: 1.5; margin-bottom: 16px;">
+                        Calculate your overall cumulative weighted average across all completed semesters (Semester 1 to 6/8) with official credit weighting.
+                    </p>
+                    <ul class="feature-list">
+                        <li>✓ Multi-semester weighted calculation</li>
+                        <li>✓ Official formula: Percentage = CGPA × 9.5</li>
+                        <li>✓ Printable summary report card</li>
+                    </ul>
+                </div>
+                <a href="cgpa.html" class="btn btn-primary" style="width: 100%;">
+                    Calculate Overall CGPA →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>PolyCGPA —  Polytechnic CGPA & SGPA Calculator</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -3,166 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semester SGPA Calculator — PolyCGPA</title>
+    <title>Semester SGPA Calculator — Computer Engineering</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- Navigation Header -->
+    <!-- Navbar -->
     <header class="navbar">
         <a href="index.html" class="logo">
-            <span class="logo-icon">Σ</span>
+            <span class="logo-icon">CT</span>
             <span>Poly<span>CGPA</span></span>
         </a>
 
         <nav class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
             <a href="sgpa.html" class="nav-link active">SGPA Calculator</a>
             <a href="cgpa.html" class="nav-link">CGPA Calculator</a>
         </nav>
 
         <div class="nav-actions">
-            <button class="btn btn-secondary btn-sm theme-toggle-btn" title="Toggle Theme">
-                <span>🌙</span> Dark
-            </button>
-            <div id="navAuthContainer"></div>
+            <div id="navAuth"></div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container" style="padding-top: 28px; padding-bottom: 40px;">
-        <div style="margin-bottom: 20px;">
-            <span class="badge" style="margin-bottom: 8px;">
-                <span class="dot"></span> Semester SGPA Tool
-            </span>
-            <h1 style="font-size: 26px; font-weight: 800;">Semester Grade Point Average (SGPA)</h1>
+    <main class="container" style="padding-top: 24px; padding-bottom: 40px;">
+        <div style="margin-bottom: 16px;">
+            <h1 style="font-size: 24px; font-weight: 800;">Semester SGPA Calculator</h1>
             <p style="color: var(--text-muted); font-size: 14px;">
-                Select your engineering branch and semester to load standard polytechnic subjects or enter custom courses.
+                Diploma in Computer Engineering (Revision 2021)
             </p>
         </div>
 
-        <!-- Branch & Semester Selection -->
-        <div class="filter-bar no-print">
-            <div>
-                <label for="selectDepartment" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Branch / Department</label>
-                <select id="selectDepartment" class="form-control">
-                    <option value="cse">Computer Engineering (CSE)</option>
-                    <option value="ece">Electronics Engineering (ECE)</option>
-                    <option value="eee">Electrical Engineering (EEE)</option>
-                    <option value="civil">Civil Engineering (CE)</option>
-                    <option value="mech">Mechanical Engineering (ME)</option>
-                </select>
+        <!-- Semester Selection Pills -->
+        <div class="sem-pills no-print" id="semPills" style="margin-bottom: 18px;">
+            <button type="button" class="sem-pill" data-sem="1">Semester 1</button>
+            <button type="button" class="sem-pill" data-sem="2">Semester 2</button>
+            <button type="button" class="sem-pill active" data-sem="3">Semester 3</button>
+            <button type="button" class="sem-pill" data-sem="4">Semester 4</button>
+            <button type="button" class="sem-pill" data-sem="5">Semester 5</button>
+            <button type="button" class="sem-pill" data-sem="6">Semester 6</button>
+        </div>
+
+        <!-- Elective Selector (S5 & S6) -->
+        <div id="electiveRow" style="display: none; margin-bottom: 16px; background: var(--surface); padding: 14px 18px; border-radius: var(--radius); border: 1px solid var(--border);"></div>
+
+        <!-- Subjects Table Card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title" id="semTitle">Semester 3 Subjects</h3>
+                <span class="badge" id="creditsBadge">20.0 Credits</span>
             </div>
 
-            <div>
-                <label for="selectSemester" style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Academic Semester</label>
-                <select id="selectSemester" class="form-control">
-                    <option value="1">Semester 1</option>
-                    <option value="2">Semester 2</option>
-                    <option value="3" selected>Semester 3</option>
-                    <option value="4">Semester 4</option>
-                    <option value="5">Semester 5</option>
-                    <option value="6">Semester 6</option>
-                </select>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px; text-align: center;">#</th>
+                            <th>Course Title</th>
+                            <th style="width: 130px;">Credits</th>
+                            <th style="width: 200px;">Letter Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectsTbody"></tbody>
+                </table>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="action-bar no-print" style="margin-top: 14px;">
+                <button type="button" class="btn btn-primary" id="calculateBtn">⚡ Calculate SGPA</button>
+
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="setAllGrades('S')">All S (10)</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="setAllGrades('A')">All A (9)</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="setAllGrades('B')">All B (8)</button>
+                </div>
             </div>
         </div>
 
-        <!-- Calculator Form -->
-        <form id="sgpaForm">
-            <div class="card">
-                <div class="card-header">
-                    <div>
-                        <h3 class="card-title">Subject & Grade Entry</h3>
-                        <p class="card-sub">Adjust credit values, choose letter grades, or add elective subjects.</p>
-                    </div>
+        <!-- Result Popup Modal -->
+        <div class="modal-overlay" id="resultModal">
+            <div class="modal-box">
+                <button type="button" class="modal-close-btn" id="closeModalBtn" title="Close">✕</button>
+                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;" id="resultHeaderLabel">
+                    SEMESTER 3 RESULT
+                </div>
+                <div class="result-score" id="resultScore">10.00</div>
+                <div class="result-badge" id="resultClass">First Class with Distinction</div>
 
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <span class="badge" id="creditsBadge">23 Credits</span>
-                        <div style="text-align: right;">
-                            <span style="font-size: 11px; color: var(--text-muted); display: block; font-weight: 600;">ESTIMATED SGPA</span>
-                            <strong style="font-size: 20px; font-family: var(--font-mono); color: var(--primary);" id="liveSgpa">9.13</strong>
-                        </div>
+                <div class="result-grid">
+                    <div class="stat-box">
+                        <span>Total Credits</span>
+                        <strong id="resultCredits">20.0</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Total Points</span>
+                        <strong id="resultPoints">200.0</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span>Percentage</span>
+                        <strong id="resultPercent">95.0%</strong>
                     </div>
                 </div>
 
-                <!-- Subjects Table -->
-                <div class="table-wrap">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th style="width: 40px; text-align: center;">#</th>
-                                <th>Subject Name</th>
-                                <th style="width: 140px;">Credits</th>
-                                <th style="width: 180px;">Letter Grade</th>
-                                <th style="width: 60px; text-align: right;" class="no-print">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subjectsTbody">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Actions Bar -->
-                <div class="action-bar no-print">
-                    <div style="display: flex; gap: 8px;">
-                        <button type="button" class="btn btn-secondary btn-sm" id="addSubjectBtn">
-                            + Add Subject
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-sm" id="resetBtn">
-                            ↺ Reset
-                        </button>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        Calculate SGPA →
-                    </button>
+                <div style="margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" style="width: 100%;" id="modalOkBtn">Close</button>
                 </div>
             </div>
-        </form>
+        </div>
     </main>
-
-    <!-- RESULT MODAL -->
-    <div class="modal" id="resultModal">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <h3 class="card-title">Semester Result Summary</h3>
-                <button type="button" class="modal-close" data-close-modal>&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="result-card" style="margin-top: 0;">
-                    <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;" id="resultDeptLabel">
-                        SEMESTER 3 • COMPUTER ENGG
-                    </div>
-                    <div class="result-score" id="resultScore">8.83</div>
-                    <div class="result-badge" id="resultClass">First Class with Distinction</div>
-
-                    <div class="result-grid">
-                        <div class="stat-box">
-                            <span>Total Credits</span>
-                            <strong id="resultCredits">23</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Total Points</span>
-                            <strong id="resultPoints">203.0</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Percentage</span>
-                            <strong id="resultPercent">83.9%</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer no-print">
-                <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
-                <button type="button" class="btn btn-primary" onclick="window.print()">🖨 Print Result</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer>
-        <p>PolyCGPA — Minimal Polytechnic CGPA & SGPA Calculator</p>
+        <p>PolyCGPA — Diploma in Computer Engineering (Revision 2021)</p>
     </footer>
 
     <!-- Scripts -->
@@ -170,189 +122,176 @@
     <script src="js/calculator.js"></script>
     <script src="js/app.js"></script>
     <script>
-        const SgpaController = {
-            currentDept: "cse",
-            currentSem: 3,
-            subjects: [],
+        let currentSem = 3;
+        let s5Elective = "5133A";
+        let s6Elective = "6131A";
+        let subjects = [];
 
-            init() {
-                const deptSelect = document.getElementById("selectDepartment");
-                const semSelect = document.getElementById("selectSemester");
-
-                if (deptSelect) deptSelect.value = this.currentDept;
-                if (semSelect) semSelect.value = this.currentSem;
-
-                this.bindEvents();
-                this.loadCurriculum();
-            },
-
-            bindEvents() {
-                document.getElementById("selectDepartment").addEventListener("change", (e) => {
-                    this.currentDept = e.target.value;
-                    this.loadCurriculum();
-                });
-
-                document.getElementById("selectSemester").addEventListener("change", (e) => {
-                    this.currentSem = parseInt(e.target.value, 10);
-                    this.loadCurriculum();
-                });
-
-                document.getElementById("addSubjectBtn").addEventListener("click", () => {
-                    this.addCustomSubject();
-                });
-
-                document.getElementById("resetBtn").addEventListener("click", () => {
-                    this.loadCurriculum();
-                    App.toast("Reset to official curriculum subjects.", "info");
-                });
-
-                document.getElementById("sgpaForm").addEventListener("submit", (e) => {
-                    e.preventDefault();
-                    this.calculateAndOpenModal();
-                });
-
-                document.querySelectorAll("[data-close-modal]").forEach(btn => {
-                    btn.addEventListener("click", () => {
-                        document.getElementById("resultModal").classList.remove("active");
-                    });
-                });
-            },
-
-            loadCurriculum() {
-                const raw = DataService.getSubjects(this.currentDept, this.currentSem);
-                this.subjects = raw.map((s, idx) => ({
-                    id: `sub_${idx}_${Date.now()}`,
-                    name: s.name,
-                    code: s.code || "",
-                    credits: s.credits || 4,
-                    grade: "A+",
-                    points: 10
-                }));
-
-                this.render();
-            },
-
-            render() {
-                const tbody = document.getElementById("subjectsTbody");
-                const gradingScale = DataService.getGradingScale();
-
-                if (this.subjects.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">
-                                No subjects found. Click "+ Add Subject" to add courses.
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                tbody.innerHTML = this.subjects.map((s, idx) => `
-                    <tr data-id="${s.id}">
-                        <td style="text-align: center; font-weight: 600; color: var(--text-muted);">${idx + 1}</td>
-                        <td>
-                            <input type="text" class="form-control course-name" value="${s.name}" placeholder="Course Title" required style="padding: 7px 10px;">
-                            ${s.code ? `<small style="color:var(--text-muted); display:block; margin-top:2px;">Code: ${s.code}</small>` : ''}
-                        </td>
-                        <td style="width: 140px;">
-                            <select class="form-control course-credits" style="padding: 7px 10px;">
-                                <option value="1" ${s.credits === 1 ? 'selected' : ''}>1 Credit</option>
-                                <option value="2" ${s.credits === 2 ? 'selected' : ''}>2 Credits (Lab)</option>
-                                <option value="3" ${s.credits === 3 ? 'selected' : ''}>3 Credits</option>
-                                <option value="4" ${s.credits === 4 ? 'selected' : ''}>4 Credits (Core)</option>
-                                <option value="5" ${s.credits === 5 ? 'selected' : ''}>5 Credits</option>
-                                <option value="6" ${s.credits === 6 ? 'selected' : ''}>6 Credits (Project)</option>
-                            </select>
-                        </td>
-                        <td style="width: 180px;">
-                            <select class="form-control course-grade" style="padding: 7px 10px;">
-                                ${gradingScale.map(g => `
-                                    <option value="${g.alias || g.grade}" data-points="${g.points}" ${g.points === s.points ? 'selected' : ''}>
-                                        ${g.label} (${g.points} pts)
-                                    </option>
-                                `).join('')}
-                            </select>
-                        </td>
-                        <td style="text-align: right; width: 60px;" class="no-print">
-                            <button type="button" class="btn btn-danger btn-sm" onclick="SgpaController.removeSubject('${s.id}')" title="Remove course">✕</button>
-                        </td>
-                    </tr>
-                `).join('');
-
-                tbody.querySelectorAll(".course-name, .course-credits, .course-grade").forEach(el => {
-                    el.addEventListener("change", () => this.syncAndLiveUpdate());
-                });
-
-                this.syncAndLiveUpdate();
-            },
-
-            syncAndLiveUpdate() {
-                const rows = document.querySelectorAll("#subjectsTbody tr[data-id]");
-                this.subjects = Array.from(rows).map(row => {
-                    const id = row.getAttribute("data-id");
-                    const name = row.querySelector(".course-name")?.value || "Course";
-                    const credits = parseFloat(row.querySelector(".course-credits")?.value) || 0;
-                    const gradeSel = row.querySelector(".course-grade");
-                    const grade = gradeSel ? gradeSel.value : "A+";
-                    const points = gradeSel ? (parseFloat(gradeSel.options[gradeSel.selectedIndex]?.getAttribute("data-points")) || 0) : 0;
-                    return { id, name, credits, grade, points };
-                });
-
-                const res = Calculator.calculateSGPA(this.subjects);
-                document.getElementById("creditsBadge").textContent = `${res.totalCredits} Credits`;
-                document.getElementById("liveSgpa").textContent = res.isValid ? res.sgpa.toFixed(2) : "0.00";
-            },
-
-            addCustomSubject() {
-                this.subjects.push({
-                    id: `custom_${Date.now()}`,
-                    name: `Course ${this.subjects.length + 1}`,
-                    code: "",
-                    credits: 3,
-                    grade: "A",
-                    points: 9
-                });
-                this.render();
-                App.toast("Subject added.", "info");
-            },
-
-            removeSubject(id) {
-                if (this.subjects.length <= 1) {
-                    App.toast("At least one subject is required.", "warning");
-                    return;
-                }
-                this.subjects = this.subjects.filter(s => s.id !== id);
-                this.render();
-            },
-
-            calculateAndOpenModal() {
-                this.syncAndLiveUpdate();
-                const res = Calculator.calculateSGPA(this.subjects);
-
-                if (!res.isValid) {
-                    App.toast(res.error || "Please check subject inputs.", "error");
-                    return;
-                }
-
-                const deptObj = DataService.getDepartmentById(this.currentDept);
-                const deptTitle = deptObj ? deptObj.name.toUpperCase() : "POLYTECHNIC";
-
-                document.getElementById("resultDeptLabel").textContent = `SEMESTER ${this.currentSem} • ${deptTitle}`;
-                document.getElementById("resultScore").textContent = res.sgpa.toFixed(2);
-                document.getElementById("resultClass").textContent = res.academicClass;
-                document.getElementById("resultCredits").textContent = res.totalCredits;
-                document.getElementById("resultPoints").textContent = res.totalPoints.toFixed(1);
-                document.getElementById("resultPercent").textContent = `${res.percentage}%`;
-
-                const modal = document.getElementById("resultModal");
-                if (modal) modal.classList.add("active");
-                App.toast(`Semester SGPA: ${res.sgpa.toFixed(2)} (${res.academicClass})`, "success");
-            }
+        const ELECTIVES_S5 = {
+            "5133A": { name: "Virtualisation Technology & Cloud Computing", lab: "Virtualisation Tech & Cloud Lab" },
+            "5133B": { name: "Ethical Hacking", lab: "Ethical Hacking Lab" },
+            "5133C": { name: "Fundamentals of AI & Machine Learning", lab: "Fundamentals of AI & ML Lab" }
         };
 
-        document.addEventListener("DOMContentLoaded", () => {
-            SgpaController.init();
-        });
+        const ELECTIVES_S6 = {
+            "6131A": "Internet of Things",
+            "6131B": "Server Administration",
+            "6131C": "Software Testing",
+            "6131D": "Introduction to 5G"
+        };
+
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            const sem = parseInt(params.get("sem"), 10);
+            if (sem >= 1 && sem <= 6) currentSem = sem;
+
+            // Semester pill clicks
+            document.querySelectorAll(".sem-pill").forEach(pill => {
+                pill.addEventListener("click", () => {
+                    currentSem = parseInt(pill.dataset.sem, 10);
+                    updateSemUI();
+                    loadCurriculum();
+                });
+            });
+
+            // Modal triggers
+            document.getElementById("calculateBtn").addEventListener("click", () => {
+                syncAndCalculate();
+                toggleModal(true);
+            });
+            document.getElementById("closeModalBtn").addEventListener("click", () => toggleModal(false));
+            document.getElementById("modalOkBtn").addEventListener("click", () => toggleModal(false));
+            document.getElementById("resultModal").addEventListener("click", (e) => {
+                if (e.target.id === "resultModal") toggleModal(false);
+            });
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") toggleModal(false);
+            });
+
+            updateSemUI();
+            loadCurriculum();
+        }
+
+        function toggleModal(show) {
+            document.getElementById("resultModal").classList.toggle("active", show);
+        }
+
+        function updateSemUI() {
+            document.querySelectorAll(".sem-pill").forEach(p => {
+                p.classList.toggle("active", parseInt(p.dataset.sem, 10) === currentSem);
+            });
+
+            document.getElementById("semTitle").textContent = `Semester ${currentSem} Subjects`;
+            document.getElementById("resultHeaderLabel").textContent = `SEMESTER ${currentSem} RESULT`;
+
+            const electiveRow = document.getElementById("electiveRow");
+            if (currentSem === 5) {
+                electiveRow.style.display = "block";
+                electiveRow.innerHTML = `
+                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Choose Program Elective I:</label>
+                    <select id="s5Select" class="form-control">
+                        ${Object.keys(ELECTIVES_S5).map(k => `<option value="${k}" ${s5Elective === k ? 'selected' : ''}>${ELECTIVES_S5[k].name}</option>`).join('')}
+                    </select>
+                `;
+                document.getElementById("s5Select")?.addEventListener("change", (e) => {
+                    s5Elective = e.target.value;
+                    loadCurriculum();
+                });
+            } else if (currentSem === 6) {
+                electiveRow.style.display = "block";
+                electiveRow.innerHTML = `
+                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Choose Program Elective II:</label>
+                    <select id="s6Select" class="form-control">
+                        ${Object.keys(ELECTIVES_S6).map(k => `<option value="${k}" ${s6Elective === k ? 'selected' : ''}>${ELECTIVES_S6[k]}</option>`).join('')}
+                    </select>
+                `;
+                document.getElementById("s6Select")?.addEventListener("change", (e) => {
+                    s6Elective = e.target.value;
+                    loadCurriculum();
+                });
+            } else {
+                electiveRow.style.display = "none";
+            }
+        }
+
+        function loadCurriculum() {
+            const raw = DataService.getSubjects(currentSem);
+            subjects = raw.map((s, idx) => ({
+                id: `sub_${idx}`,
+                name: s.name,
+                code: s.code,
+                credits: s.credits,
+                grade: "S",
+                points: 10
+            }));
+
+            if (currentSem === 5 && ELECTIVES_S5[s5Elective]) {
+                if (subjects[2]) subjects[2].name = ELECTIVES_S5[s5Elective].name;
+                if (subjects[5]) subjects[5].name = ELECTIVES_S5[s5Elective].lab;
+            } else if (currentSem === 6 && ELECTIVES_S6[s6Elective]) {
+                if (subjects[1]) subjects[1].name = ELECTIVES_S6[s6Elective];
+            }
+
+            render();
+        }
+
+        function setAllGrades(gradeKey) {
+            const pts = DataService.getGradePoints(gradeKey);
+            subjects.forEach(s => { s.grade = gradeKey; s.points = pts; });
+            render();
+        }
+
+        function render() {
+            const tbody = document.getElementById("subjectsTbody");
+            const scale = DataService.getGradingScale();
+
+            tbody.innerHTML = subjects.map((s, idx) => `
+                <tr data-idx="${idx}">
+                    <td style="text-align: center; color: var(--text-muted); font-weight: 600;">${idx + 1}</td>
+                    <td>
+                        <input type="text" class="form-control sub-name" data-idx="${idx}" value="${s.name}" required style="padding: 6px 10px; font-weight: 500;">
+                        ${s.code ? `<small style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11px;">Code: ${s.code}</small>` : ''}
+                    </td>
+                    <td style="width: 120px;">
+                        <input type="number" step="0.5" min="0.5" max="25" class="form-control sub-credits" data-idx="${idx}" value="${s.credits}" required style="padding: 6px 10px; font-family: var(--font-mono);">
+                    </td>
+                    <td style="width: 200px;">
+                        <select class="form-control sub-grade" data-idx="${idx}" style="padding: 6px 10px;">
+                            ${scale.map(g => `<option value="${g.grade}" ${g.grade === s.grade ? 'selected' : ''}>${g.grade} (${g.points} pts)</option>`).join('')}
+                        </select>
+                    </td>
+                </tr>
+            `).join('');
+
+            tbody.querySelectorAll(".sub-name, .sub-credits, .sub-grade").forEach(el => {
+                el.addEventListener("change", syncAndCalculate);
+            });
+
+            syncAndCalculate();
+        }
+
+        function syncAndCalculate() {
+            const rows = document.querySelectorAll("#subjectsTbody tr");
+            rows.forEach(row => {
+                const idx = parseInt(row.dataset.idx, 10);
+                if (!subjects[idx]) return;
+                subjects[idx].name = row.querySelector(".sub-name")?.value || "Course";
+                subjects[idx].credits = parseFloat(row.querySelector(".sub-credits")?.value) || 0;
+                const gradeSel = row.querySelector(".sub-grade");
+                subjects[idx].grade = gradeSel ? gradeSel.value : "S";
+                subjects[idx].points = DataService.getGradePoints(subjects[idx].grade);
+            });
+
+            const res = Calculator.calculateSGPA(subjects);
+            document.getElementById("creditsBadge").textContent = `${res.totalCredits.toFixed(1)} Credits`;
+            document.getElementById("resultScore").textContent = res.isValid ? res.sgpa.toFixed(2) : "0.00";
+            document.getElementById("resultClass").textContent = res.academicClass;
+            document.getElementById("resultCredits").textContent = `${res.totalCredits.toFixed(1)}`;
+            document.getElementById("resultPoints").textContent = res.totalPoints.toFixed(1);
+            document.getElementById("resultPercent").textContent = `${res.percentage}%`;
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
     </script>
 </body>
 </html>

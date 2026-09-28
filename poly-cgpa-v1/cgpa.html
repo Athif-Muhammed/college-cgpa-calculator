@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumulative CGPA Calculator — Computer Engineering</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Simple Navbar -->
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">CT</span>
+            <span>Poly<span>CGPA</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="sgpa.html" class="nav-link">SGPA Calculator</a>
+            <a href="cgpa.html" class="nav-link active">CGPA Calculator</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div id="navAuth"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 24px; padding-bottom: 40px;">
+        <div style="margin-bottom: 16px;">
+            <h1 style="font-size: 24px; font-weight: 800;">Cumulative CGPA Calculator</h1>
+            <p style="color: var(--text-muted); font-size: 14px;">
+                Enter your SGPA for completed semesters (120 total diploma credits).
+            </p>
+        </div>
+
+        <!-- Semesters Table Card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Completed Semester SGPAs</h3>
+                <span class="badge" id="totalCreditsBadge">120.0 Credits</span>
+            </div>
+
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px; text-align: center;">Include</th>
+                            <th style="width: 140px;">Semester</th>
+                            <th>Semester SGPA (0.00 – 10.00)</th>
+                            <th style="width: 140px;">Credits</th>
+                            <th style="width: 120px;">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cgpaTbody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="action-bar no-print" style="margin-top: 14px;">
+                <button type="button" class="btn btn-secondary btn-sm" id="resetBtn">
+                    ↺ Reset SGPAs
+                </button>
+                <a href="sgpa.html" class="btn btn-secondary btn-sm">
+                    Calculate Semester SGPA →
+                </a>
+            </div>
+        </div>
+
+        <!-- Live CGPA Result Card -->
+        <div class="result-card" id="cgpaResultCard">
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                OVERALL CUMULATIVE RESULT
+            </div>
+            <div class="result-score" id="resultScore">8.98</div>
+            <div class="result-badge" id="resultClass">First Class with Distinction</div>
+
+            <div class="result-grid">
+                <div class="stat-box">
+                    <span>Completed Terms</span>
+                    <strong id="resultTerms">6 Semesters</strong>
+                </div>
+                <div class="stat-box">
+                    <span>Total Credits</span>
+                    <strong id="resultCredits">120.0</strong>
+                </div>
+                <div class="stat-box">
+                    <span>Cumulative Points</span>
+                    <strong id="resultPoints">1077.5</strong>
+                </div>
+                <div class="stat-box">
+                    <span>Percentage (× 9.5)</span>
+                    <strong id="resultPercent">85.3%</strong>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px; text-align: right;" class="no-print">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="window.print()">
+                    🖨 Print CGPA Report
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>PolyCGPA — Diploma in Computer Engineering (Revision 2021)</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        const CgpaController = {
+            semesters: [
+                { semester: 1, sgpa: 9.00, credits: 20.5, included: true },
+                { semester: 2, sgpa: 8.50, credits: 19.0, included: true },
+                { semester: 3, sgpa: 8.80, credits: 20.0, included: true },
+                { semester: 4, sgpa: 9.20, credits: 21.5, included: true },
+                { semester: 5, sgpa: 8.90, credits: 17.5, included: true },
+                { semester: 6, sgpa: 9.40, credits: 21.5, included: true }
+            ],
+
+            init() {
+                this.bindEvents();
+                this.render();
+            },
+
+            bindEvents() {
+                document.getElementById("resetBtn").addEventListener("click", () => {
+                    this.semesters = [
+                        { semester: 1, sgpa: 8.50, credits: 20.5, included: true },
+                        { semester: 2, sgpa: 8.50, credits: 19.0, included: true },
+                        { semester: 3, sgpa: 8.50, credits: 20.0, included: true },
+                        { semester: 4, sgpa: 8.50, credits: 21.5, included: true },
+                        { semester: 5, sgpa: 8.50, credits: 17.5, included: true },
+                        { semester: 6, sgpa: 8.50, credits: 21.5, included: true }
+                    ];
+                    this.render();
+                });
+            },
+
+            render() {
+                const tbody = document.getElementById("cgpaTbody");
+                tbody.innerHTML = this.semesters.map((sem, idx) => `
+                    <tr style="${!sem.included ? 'opacity: 0.45; background: rgba(148,163,184,0.05);' : ''}">
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="sem-inc" ${sem.included ? 'checked' : ''} style="width: 16px; height: 16px; cursor: pointer;">
+                        </td>
+                        <td style="font-weight: 700;">
+                            Semester ${sem.semester}
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" min="0" max="10" class="form-control sem-sgpa" value="${sem.sgpa}" placeholder="e.g. 8.50" ${!sem.included ? 'disabled' : ''} style="padding: 6px 10px; font-family: var(--font-mono);">
+                        </td>
+                        <td style="font-family: var(--font-mono); font-weight: 600; color: var(--text-muted);">
+                            ${sem.credits.toFixed(1)}
+                        </td>
+                        <td style="font-family: var(--font-mono); font-weight: 700; color: var(--primary);" class="sem-pts">
+                            ${sem.included ? (sem.sgpa * sem.credits).toFixed(1) : '—'}
+                        </td>
+                    </tr>
+                `).join('');
+
+                tbody.querySelectorAll(".sem-inc, .sem-sgpa").forEach((input, idx) => {
+                    input.addEventListener("input", () => this.syncAndCalculate());
+                    input.addEventListener("change", () => {
+                        this.syncAndCalculate();
+                        this.render();
+                    });
+                });
+
+                this.syncAndCalculate();
+            },
+
+            syncAndCalculate() {
+                const rows = document.querySelectorAll("#cgpaTbody tr");
+                this.semesters = Array.from(rows).map((row, idx) => {
+                    const included = row.querySelector(".sem-inc")?.checked ?? true;
+                    const sgpa = parseFloat(row.querySelector(".sem-sgpa")?.value) || 0;
+                    const credits = this.semesters[idx].credits;
+                    return { semester: idx + 1, sgpa, credits, included };
+                });
+
+                const active = this.semesters.filter(s => s.included);
+                const res = Calculator.calculateCGPA(active);
+
+                document.getElementById("totalCreditsBadge").textContent = `${res.totalCredits.toFixed(1)} Credits`;
+                document.getElementById("resultScore").textContent = res.isValid ? res.cgpa.toFixed(2) : "0.00";
+                document.getElementById("resultClass").textContent = res.academicClass;
+                document.getElementById("resultTerms").textContent = `${res.completedSemesters} Semesters`;
+                document.getElementById("resultCredits").textContent = `${res.totalCredits.toFixed(1)} / 120.0`;
+                document.getElementById("resultPoints").textContent = res.totalPoints.toFixed(1);
+                document.getElementById("resultPercent").textContent = `${res.percentage}%`;
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            CgpaController.init();
+        });
+    </script>
+</body>
+</html>

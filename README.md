@@ -1,49 +1,40 @@
-# PolyCGPA — Polytechnic SGPA & CGPA Calculator
+# PolyCGPA — Computer Engineering SGPA & CGPA Calculator
 
-A minimal, fast, and responsive web application designed for polytechnic and technical diploma students to calculate Semester SGPA and Cumulative CGPA.
-
----
-
-## ✨ Features
-
-- **⚡ SGPA Calculator**: Preloaded with 6-semester curricula for 5 major diploma branches (Computer, Electronics, Electrical, Civil, Mechanical). Allows editing credits, picking letter grades (O, A+, A, B+, B, C, P, F), and adding custom subjects.
-- **🎯 CGPA Calculator**: Calculates cumulative weighted average across multiple semesters with instant percentage (`CGPA × 9.5`) and division classification.
-- **🏠 Interactive Home Hub**: Contains on-page instant SGPA & CGPA quick calculators with zero friction.
-- **👤 Lightweight Demo Login**: Instant 1-click demo profile (Aarav Sharma - CSE) or customizable student header without any databases or complex auth setup.
-- **🌓 Dark & Light Modes**: Clean emerald theme with smooth theme toggling.
-- **🖨️ Print Support**: Clean printable result cards and summary reports.
+A simple, fast, and accurate SGPA and CGPA calculator for **Diploma in Computer Engineering (Revision 2021)** students under the **State Board of Technical Education (SBTE), Kerala**.
 
 ---
 
-## 📂 Minimal Project Structure
+## ⚡ Features
+
+- **Semester SGPA Calculator (`sgpa.html`)**:
+  - Preloaded with all 6 semesters of Computer Engineering courses and official credits.
+  - Supports electives for Semester 5 and Semester 6.
+  - Instant live calculation of SGPA, equivalent percentage (`SGPA × 9.5`), and academic class.
+
+- **Cumulative CGPA Calculator (`cgpa.html`)**:
+  - Weighted CGPA calculation across all completed semesters (120 total diploma credits).
+  - Instant live percentage (`CGPA × 9.5`) and division classification.
+  - Printable scorecards.
+
+---
+
+## 📂 Project Structure
 
 ```
-├── index.html         # Home page with quick SGPA / CGPA calculators
-├── sgpa.html          # Dedicated Semester SGPA Calculator
-├── cgpa.html          # Dedicated Cumulative CGPA Calculator
+├── index.html         # Homepage
+├── sgpa.html          # Semester SGPA Calculator
+├── cgpa.html          # Cumulative CGPA Calculator
 ├── css/
-│   └── style.css      # Unified responsive stylesheet (Dark/Light mode)
+│   └── style.css      # Minimal responsive stylesheet
 ├── js/
-│   ├── data.js        # Branches, grading scales & 6-semester subjects
+│   ├── data.js        # Computer Engineering Revision 2021 subjects & credits
 │   ├── calculator.js  # Pure SGPA & CGPA math engine
-│   └── app.js         # Theme toggle, demo profile modal, and UI helpers
-└── README.md          # Project documentation
+│   └── app.js         # Auth & UI helper
+└── backup_poly_cgpa_calculator/ # Complete backup of original multi-branch codebase
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 How to Run
 
-No build tools, servers, or dependencies required. Simply open `index.html` in any modern web browser:
-
-```bash
-# Open directly in browser (Windows)
-start index.html
-```
-
-Or serve via any static file server:
-```bash
-npx serve .
-# or
-python -m http.server 8080
-```
+Simply open `index.html` in any browser. No servers or dependencies required.
