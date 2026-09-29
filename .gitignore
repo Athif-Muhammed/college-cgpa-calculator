@@ -1,0 +1,28 @@
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# C / C++ build output & executables
+*.exe
+*.o
+*.obj
+*.out
+*.app
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs & Environment
+*.log
+.env
+.env.local

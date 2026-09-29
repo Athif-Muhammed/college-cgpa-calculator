@@ -141,97 +141,58 @@
         };
 
         function init() {
-            const params = new URLSearchParams(window.location.search);
-            const sem = parseInt(params.get("sem"), 10);
+            const sem = parseInt(new URLSearchParams(location.search).get("sem"), 10);
             if (sem >= 1 && sem <= 6) currentSem = sem;
 
-            // Semester pill clicks
-            document.querySelectorAll(".sem-pill").forEach(pill => {
-                pill.addEventListener("click", () => {
-                    currentSem = parseInt(pill.dataset.sem, 10);
-                    updateSemUI();
+            // Semester pill selection
+            document.getElementById("semPills").onclick = (e) => {
+                const btn = e.target.closest(".sem-pill");
+                if (btn && +btn.dataset.sem !== currentSem) {
+                    currentSem = +btn.dataset.sem;
+                    updateUI();
                     loadCurriculum();
-                });
-            });
+                }
+            };
 
-            // Modal triggers
-            document.getElementById("calculateBtn").addEventListener("click", () => {
-                syncAndCalculate();
-                toggleModal(true);
-            });
-            document.getElementById("closeModalBtn").addEventListener("click", () => toggleModal(false));
-            document.getElementById("modalOkBtn").addEventListener("click", () => toggleModal(false));
-            document.getElementById("resultModal").addEventListener("click", (e) => {
-                if (e.target.id === "resultModal") toggleModal(false);
-            });
-            document.addEventListener("keydown", (e) => {
-                if (e.key === "Escape") toggleModal(false);
-            });
+            // Modal open & close
+            const modal = document.getElementById("resultModal");
+            document.getElementById("calculateBtn").onclick = () => { syncAndCalculate(); modal.classList.add("active"); };
+            modal.onclick = (e) => { if (e.target.id === "resultModal" || e.target.closest("#closeModalBtn, #modalOkBtn")) modal.classList.remove("active"); };
+            document.onkeydown = (e) => { if (e.key === "Escape") modal.classList.remove("active"); };
 
-            updateSemUI();
+            updateUI();
             loadCurriculum();
         }
 
-        function toggleModal(show) {
-            document.getElementById("resultModal").classList.toggle("active", show);
-        }
-
-        function updateSemUI() {
-            document.querySelectorAll(".sem-pill").forEach(p => {
-                p.classList.toggle("active", parseInt(p.dataset.sem, 10) === currentSem);
-            });
-
+        function updateUI() {
+            document.querySelectorAll(".sem-pill").forEach(p => p.classList.toggle("active", +p.dataset.sem === currentSem));
             document.getElementById("semTitle").textContent = `Semester ${currentSem} Subjects`;
             document.getElementById("resultHeaderLabel").textContent = `SEMESTER ${currentSem} RESULT`;
 
-            const electiveRow = document.getElementById("electiveRow");
+            const row = document.getElementById("electiveRow");
             if (currentSem === 5) {
-                electiveRow.style.display = "block";
-                electiveRow.innerHTML = `
-                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Choose Program Elective I:</label>
-                    <select id="s5Select" class="form-control">
-                        ${Object.keys(ELECTIVES_S5).map(k => `<option value="${k}" ${s5Elective === k ? 'selected' : ''}>${ELECTIVES_S5[k].name}</option>`).join('')}
-                    </select>
-                `;
-                document.getElementById("s5Select")?.addEventListener("change", (e) => {
-                    s5Elective = e.target.value;
-                    loadCurriculum();
-                });
+                row.style.display = "block";
+                row.innerHTML = `<label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Choose Program Elective I:</label>
+                    <select id="s5Select" class="form-control">${Object.keys(ELECTIVES_S5).map(k => `<option value="${k}" ${s5Elective === k ? 'selected' : ''}>${ELECTIVES_S5[k].name}</option>`).join('')}</select>`;
+                document.getElementById("s5Select").onchange = (e) => { s5Elective = e.target.value; loadCurriculum(); };
             } else if (currentSem === 6) {
-                electiveRow.style.display = "block";
-                electiveRow.innerHTML = `
-                    <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">Choose Program Elective II:</label>
-                    <select id="s6Select" class="form-control">
-                        ${Object.keys(ELECTIVES_S6).map(k => `<option value="${k}" ${s6Elective === k ? 'selected' : ''}>${ELECTIVES_S6[k]}</option>`).join('')}
-                    </select>
-                `;
-                document.getElementById("s6Select")?.addEventListener("change", (e) => {
-                    s6Elective = e.target.value;
-                    loadCurriculum();
-                });
+                row.style.display = "block";
+                row.innerHTML = `<label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Choose Program Elective II:</label>
+                    <select id="s6Select" class="form-control">${Object.keys(ELECTIVES_S6).map(k => `<option value="${k}" ${s6Elective === k ? 'selected' : ''}>${ELECTIVES_S6[k]}</option>`).join('')}</select>`;
+                document.getElementById("s6Select").onchange = (e) => { s6Elective = e.target.value; loadCurriculum(); };
             } else {
-                electiveRow.style.display = "none";
+                row.style.display = "none";
             }
         }
 
         function loadCurriculum() {
-            const raw = DataService.getSubjects(currentSem);
-            subjects = raw.map((s, idx) => ({
-                id: `sub_${idx}`,
-                name: s.name,
-                code: s.code,
-                credits: s.credits,
-                grade: "S",
-                points: 10
-            }));
-
+            subjects = DataService.getSubjects(currentSem).map(s => ({ ...s, grade: "S", points: 10 }));
             if (currentSem === 5 && ELECTIVES_S5[s5Elective]) {
                 if (subjects[2]) subjects[2].name = ELECTIVES_S5[s5Elective].name;
                 if (subjects[5]) subjects[5].name = ELECTIVES_S5[s5Elective].lab;
-            } else if (currentSem === 6 && ELECTIVES_S6[s6Elective]) {
-                if (subjects[1]) subjects[1].name = ELECTIVES_S6[s6Elective];
+            } else if (currentSem === 6 && ELECTIVES_S6[s6Elective] && subjects[1]) {
+                subjects[1].name = ELECTIVES_S6[s6Elective];
             }
-
             render();
         }
 
@@ -242,51 +203,34 @@
         }
 
         function render() {
-            const tbody = document.getElementById("subjectsTbody");
             const scale = DataService.getGradingScale();
-
-            tbody.innerHTML = subjects.map((s, idx) => `
-                <tr data-idx="${idx}">
+            document.getElementById("subjectsTbody").innerHTML = subjects.map((s, idx) => `
+                <tr>
                     <td style="text-align: center; color: var(--text-muted); font-weight: 600;">${idx + 1}</td>
                     <td>
-                        <input type="text" class="form-control sub-name" data-idx="${idx}" value="${s.name}" required style="padding: 6px 10px; font-weight: 500;">
+                        <input type="text" class="form-control" value="${s.name}" onchange="subjects[${idx}].name=this.value; syncAndCalculate();" style="padding: 6px 10px; font-weight: 500;">
                         ${s.code ? `<small style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11px;">Code: ${s.code}</small>` : ''}
                     </td>
                     <td style="width: 120px;">
-                        <input type="number" step="0.5" min="0.5" max="25" class="form-control sub-credits" data-idx="${idx}" value="${s.credits}" required style="padding: 6px 10px; font-family: var(--font-mono);">
+                        <input type="number" step="0.5" min="0.5" max="25" class="form-control" value="${s.credits}" onchange="subjects[${idx}].credits=parseFloat(this.value)||0; syncAndCalculate();" style="padding: 6px 10px; font-family: var(--font-mono);">
                     </td>
                     <td style="width: 200px;">
-                        <select class="form-control sub-grade" data-idx="${idx}" style="padding: 6px 10px;">
+                        <select class="form-control" onchange="subjects[${idx}].grade=this.value; subjects[${idx}].points=DataService.getGradePoints(this.value); syncAndCalculate();" style="padding: 6px 10px;">
                             ${scale.map(g => `<option value="${g.grade}" ${g.grade === s.grade ? 'selected' : ''}>${g.grade} (${g.points} pts)</option>`).join('')}
                         </select>
                     </td>
                 </tr>
             `).join('');
 
-            tbody.querySelectorAll(".sub-name, .sub-credits, .sub-grade").forEach(el => {
-                el.addEventListener("change", syncAndCalculate);
-            });
-
             syncAndCalculate();
         }
 
         function syncAndCalculate() {
-            const rows = document.querySelectorAll("#subjectsTbody tr");
-            rows.forEach(row => {
-                const idx = parseInt(row.dataset.idx, 10);
-                if (!subjects[idx]) return;
-                subjects[idx].name = row.querySelector(".sub-name")?.value || "Course";
-                subjects[idx].credits = parseFloat(row.querySelector(".sub-credits")?.value) || 0;
-                const gradeSel = row.querySelector(".sub-grade");
-                subjects[idx].grade = gradeSel ? gradeSel.value : "S";
-                subjects[idx].points = DataService.getGradePoints(subjects[idx].grade);
-            });
-
             const res = Calculator.calculateSGPA(subjects);
             document.getElementById("creditsBadge").textContent = `${res.totalCredits.toFixed(1)} Credits`;
             document.getElementById("resultScore").textContent = res.isValid ? res.sgpa.toFixed(2) : "0.00";
             document.getElementById("resultClass").textContent = res.academicClass;
-            document.getElementById("resultCredits").textContent = `${res.totalCredits.toFixed(1)}`;
+            document.getElementById("resultCredits").textContent = res.totalCredits.toFixed(1);
             document.getElementById("resultPoints").textContent = res.totalPoints.toFixed(1);
             document.getElementById("resultPercent").textContent = `${res.percentage}%`;
         }

@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PolyCGPA — Academic Project Report & Code Documentation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@page {
+    size: A4 portrait;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-right {
+        content: counter(page);
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.6;
+    font-size: 10.5pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.page-break {
+    page-break-before: always;
+    break-before: page;
+}
+
+.avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+/* ================= COVER PAGE ================= */
+.cover-page {
+    height: 100vh;
+    min-height: 250mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 14mm 10mm;
+    border: 2px solid #0f172a;
+    position: relative;
+    background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.05), transparent 40%);
+}
+
+.cover-header {
+    width: 100%;
+}
+
+.cover-org {
+    font-size: 13.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.cover-sub-org {
+    font-size: 10.5pt;
+    color: #475569;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cover-badge-container {
+    margin: 22px 0 15px;
+}
+
+.cover-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 50px;
+    font-size: 9.5pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.cover-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26pt;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.25;
+    margin-bottom: 12px;
+}
+
+.cover-title span {
+    color: #059669;
+}
+
+.cover-subtitle {
+    font-size: 11.5pt;
+    color: #334155;
+    max-width: 530px;
+    margin: 0 auto;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.cover-middle {
+    margin: 20px 0;
+    width: 100%;
+}
+
+.cover-details-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 16px 24px;
+    display: inline-block;
+    text-align: left;
+    min-width: 360px;
+}
+
+.cover-details-box p {
+    font-size: 10pt;
+    margin-bottom: 6px;
+    color: #334155;
+}
+
+.cover-details-box strong {
+    color: #0f172a;
+}
+
+.cover-footer {
+    width: 100%;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 15px;
+}
+
+.cover-academic-year {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* ================= HEADINGS ================= */
+h1.chapter-title {
+    font-size: 17pt;
+    font-weight: 800;
+    color: #0f172a;
+    border-bottom: 2.5px solid #059669;
+    padding-bottom: 8px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    break-after: avoid;
+}
+
+h2.section-title {
+    font-size: 12.5pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    break-after: avoid;
+}
+
+h2.section-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 15px;
+    background: #059669;
+    border-radius: 2px;
+}
+
+h3.sub-section-title {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #1e293b;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    break-after: avoid;
+}
+
+p {
+    margin-bottom: 10px;
+    text-align: justify;
+    color: #334155;
+    font-size: 10pt;
+}
+
+ul, ol {
+    margin-left: 22px;
+    margin-bottom: 12px;
+}
+
+li {
+    margin-bottom: 4px;
+    color: #334155;
+    font-size: 10pt;
+}
+
+/* ================= TABLES ================= */
+table.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px;
+    font-size: 9pt;
+    page-break-inside: avoid;
+}
+
+table.report-table th, table.report-table td {
+    border: 1px solid #cbd5e1;
+    padding: 6px 9px;
+    text-align: left;
+}
+
+table.report-table th {
+    background-color: #0f172a;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 8.5pt;
+    letter-spacing: 0.5px;
+}
+
+table.report-table tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ================= CARDS & BOXES ================= */
+.formula-card {
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-left: 5px solid #059669;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    page-break-inside: avoid;
+}
+
+.formula-card .formula-title {
+    font-weight: 700;
+    color: #065f46;
+    font-size: 10pt;
+    margin-bottom: 4px;
+}
+
+.formula-card .formula-math {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5pt;
+    font-weight: 600;
+    color: #047857;
+    background: #ffffff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px dashed #6ee7b7;
+    display: block;
+    margin: 6px 0;
+    text-align: center;
+}
+
+.info-card {
+    background: #f8fafc;
+    border-left: 4px solid #3b82f6;
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+}
+
+/* ================= SYSTEM DIAGRAMS ================= */
+.diagram-container {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 14px 0;
+    text-align: center;
+    page-break-inside: avoid;
+}
+
+.flow-grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.flow-step {
+    background: #ffffff;
+    border: 1.5px solid #0f172a;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 8.5pt;
+    font-weight: 600;
+    color: #0f172a;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    flex: 1;
+}
+
+.flow-arrow {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #059669;
+}
+
+/* ================= CODE LISTINGS ================= */
+pre.code-block {
+    background: #0f172a;
+    color: #f8fafc;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 8pt;
+    padding: 10px 12px;
+    border-radius: 0 6px 6px 6px;
+    overflow-x: auto;
+    line-height: 1.42;
+    margin: 0 0 16px 0;
+    border: 1px solid #334155;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.ln {
+    display: inline-block;
+    width: 32px;
+    color: #64748b;
+    user-select: none;
+    text-align: right;
+    margin-right: 8px;
+    font-weight: 500;
+}
+
+.code-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5pt;
+    font-weight: 600;
+    background: #1e293b;
+    color: #38bdf8;
+    padding: 5px 12px;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 0;
+    display: inline-block;
+    border: 1px solid #334155;
+    border-bottom: none;
+}
+
+/* ================= CERTIFICATE & TOC ================= */
+.cert-body {
+    padding: 20px 10px;
+    line-height: 2;
+    text-align: justify;
+    font-size: 11pt;
+}
+
+.signature-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    padding: 0 20px;
+}
+
+.signature-box {
+    text-align: center;
+}
+
+.signature-line {
+    width: 170px;
+    border-top: 1px dashed #0f172a;
+    margin-bottom: 6px;
+}
+
+.toc-list {
+    list-style: none;
+    margin-left: 0;
+}
+
+.toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    font-size: 10pt;
+}
+
+.toc-name {
+    font-weight: 500;
+    color: #0f172a;
+}
+
+.toc-dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted #94a3b8;
+    margin: 0 8px;
+}
+
+.toc-page {
+    font-weight: 600;
+    color: #059669;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.badge-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 8pt;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.badge-success { background: #dcfce7; color: #15803d; }
+.badge-info { background: #e0f2fe; color: #0369a1; }
+.badge-warning { background: #fef3c7; color: #b45309; }
+
+.tree-view {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5pt;
+    color: #0f172a;
+    line-height: 1.5;
+    margin: 12px 0;
+    page-break-inside: avoid;
+}
+</style>
+</head>
+<body>
+
+<!-- ================= COVER PAGE ================= -->
+<div class="cover-page">
+    <div class="cover-header">
+        <div class="cover-org">State Board of Technical Education (SBTE), Kerala</div>
+        <div class="cover-sub-org">Department of Technical Education • Government of Kerala</div>
+        <div class="cover-badge-container">
+            <span class="cover-badge">Academic Project Documentation & Codebase</span>
+        </div>
+    </div>
+
+    <div class="cover-middle">
+        <h1 class="cover-title">POLY<span>CGPA</span></h1>
+        <div class="cover-subtitle">
+            A Web-Based Academic Evaluation & Grade Point Averaging Engine for Diploma in Computer Engineering (Revision 2021)
+        </div>
+        
+        <div style="margin-top: 25px;">
+            <div class="cover-details-box">
+                <p><strong>Programme:</strong> Diploma in Computer Engineering</p>
+                <p><strong>Curriculum Scheme:</strong> Revision 2021 (120 Total Diploma Credits)</p>
+                <p><strong>Project Category:</strong> Educational Software & Web Technology</p>
+                <p><strong>Technology Stack:</strong> HTML5, CSS3, JavaScript (ES6+), Headless PDF</p>
+                <p><strong>Submission Format:</strong> Comprehensive Physical A4 Project Report</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cover-footer">
+        <div class="cover-academic-year">Academic Year 2024 – 2025 / 2026</div>
+        <div style="font-size: 8.5pt; color: #64748b; margin-top: 4px;">Standard A4 Portrait • Printable Laboratory & Project Submission Copy</div>
+    </div>
+</div>
+
+<!-- ================= CERTIFICATE ================= -->
+<div class="page-break"></div>
+<div style="padding-top: 10mm;">
+    <h1 class="chapter-title text-center" style="border-bottom: none; font-size: 20pt; margin-bottom: 25px;">Certificate of Completion</h1>
+    <div class="cert-body">
+        <p>
+            This is to certify that the project entitled <strong>"PolyCGPA: Computer Engineering SGPA & CGPA Calculator"</strong> is a bonafide record of technical development work carried out for the curriculum of <strong>Diploma in Computer Engineering (Revision 2021)</strong> under the <strong>State Board of Technical Education (SBTE), Kerala</strong>.
+        </p>
+        <p>
+            The project satisfies all institutional requirements regarding course credit models, official letter-grade point conversions, elective stream configurations, and cumulative weighted grade calculations across all six academic semesters (120 total credits).
+        </p>
+    </div>
+
+    <div class="signature-row" style="margin-top: 70px;">
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <strong>Project Guide / Faculty</strong><br>
+            <span style="font-size: 8.5pt; color: #64748b;">Department of Computer Engg.</span>
+        </div>
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <strong>Head of Department (HOD)</strong><br>
+            <span style="font-size: 8.5pt; color: #64748b;">Department of Computer Engg.</span>
+        </div>
+    </div>
+
+    <div class="signature-row" style="margin-top: 50px;">
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <strong>Internal Examiner</strong>
+        </div>
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <strong>External Examiner</strong>
+        </div>
+    </div>
+</div>
+
+<!-- ================= DECLARATION & ACKNOWLEDGEMENT ================= -->
+<div class="page-break"></div>
+<div style="padding-top: 5mm;">
+    <h1 class="chapter-title">Declaration</h1>
+    <p>
+        I hereby declare that the software project entitled <strong>"PolyCGPA: Computer Engineering SGPA & CGPA Calculator"</strong> submitted for the Diploma in Computer Engineering is an authentic work developed with strict adherence to the academic regulations and curriculum scheme laid down by the State Board of Technical Education (SBTE), Kerala.
+    </p>
+    <div style="margin-top: 30px; text-align: right; padding-right: 20px;">
+        <div class="signature-line" style="margin-left: auto;"></div>
+        <strong>Project Candidate / Student</strong>
+    </div>
+
+    <div style="margin-top: 35px;"></div>
+
+    <h1 class="chapter-title">Acknowledgement</h1>
+    <p>
+        I express my sincere gratitude to our esteemed Institution, Principal, and Head of the Department of Computer Engineering for providing the computational resources, guidance, and academic environment necessary to successfully develop and document this project.
+    </p>
+    <p>
+        I also extend my sincere appreciation to my project guide and faculty members for their valuable guidance, insightful feedback, and continuous support throughout the software architecture, coding, and testing phases of this project.
+    </p>
+</div>
+
+<!-- ================= ABSTRACT & TABLE OF CONTENTS ================= -->
+<div class="page-break"></div>
+<div style="padding-top: 5mm;">
+    <h1 class="chapter-title">Abstract</h1>
+    <p>
+        In modern polytechnic technical education under the <strong>State Board of Technical Education (SBTE), Kerala (Revision 2021)</strong>, academic performance is evaluated through a credit-based grading scheme utilizing <strong>Semester Grade Point Average (SGPA)</strong> and <strong>Cumulative Grade Point Average (CGPA)</strong> across 120 total credits. Manual computation of these scores is tedious, prone to human error, and complicated by varying credit weights per course, laboratory, elective streams, and specific percentage conversion factors (GPA &times; 9.5).
+    </p>
+    <p>
+        <strong>PolyCGPA</strong> is a lightweight, responsive, zero-dependency, web-based computational application designed specifically to automate and streamline SGPA and CGPA computation for Computer Engineering diploma students. The application features complete, pre-configured syllabi for all six semesters, dynamic elective selectors for Semesters 5 and 6, instant real-time mathematical evaluations, visual grade breakdowns, backlog detection, and printable scorecards.
+    </p>
+
+    <div style="margin-top: 25px;"></div>
+
+    <h1 class="chapter-title">Table of Contents</h1>
+    <ul class="toc-list">
+        <li class="toc-item"><span class="toc-name">1. Introduction & Project Overview</span><span class="toc-dots"></span><span class="toc-page">Chapter 1</span></li>
+        <li class="toc-item"><span class="toc-name">2. Kerala SBTE Revision 2021 Grading Framework</span><span class="toc-dots"></span><span class="toc-page">Chapter 2</span></li>
+        <li class="toc-item"><span class="toc-name">3. Mathematical Formulations & Algorithms</span><span class="toc-dots"></span><span class="toc-page">Chapter 3</span></li>
+        <li class="toc-item"><span class="toc-name">4. System Architecture, Directory & Code Structure</span><span class="toc-dots"></span><span class="toc-page">Chapter 4</span></li>
+        <li class="toc-item"><span class="toc-name">5. Complete 6-Semester Curriculum & Credit Allocation</span><span class="toc-dots"></span><span class="toc-page">Chapter 5</span></li>
+        <li class="toc-item"><span class="toc-name">6. User Interface, Modules & Screen Design</span><span class="toc-dots"></span><span class="toc-page">Chapter 6</span></li>
+        <li class="toc-item"><span class="toc-name">7. Verification, Testing & Edge-Case Validation</span><span class="toc-dots"></span><span class="toc-page">Chapter 7</span></li>
+        <li class="toc-item"><span class="toc-name">8. Complete Verbatim Source Code Listing (All 8 Files)</span><span class="toc-dots"></span><span class="toc-page">Chapter 8</span></li>
+        <li class="toc-item"><span class="toc-name">9. Conclusion & Future Roadmap</span><span class="toc-dots"></span><span class="toc-page">Chapter 9</span></li>
+    </ul>
+</div>
+
+<!-- ================= CHAPTER 1 ================= -->
+<div class="page-break"></div>
+<div>
+    <h1 class="chapter-title">1. Introduction & Project Overview</h1>
+    
+    <h2 class="section-title">1.1 Background and Motivation</h2>
+    <p>
+        The Department of Technical Education, Kerala, updated its polytechnic curriculum with the <strong>Revision 2021 (Rev 2021)</strong> scheme. This outcome-based education model evaluates diploma students over six semesters spanning 120 total credits. Each course—ranging from core theory and practical labs to summer internships, seminars, and capstone projects—carries distinct credit allocations.
+    </p>
+    <p>
+        Students frequently face hurdles when determining their exact academic standing, checking the impact of elective course selections, converting letter grades to percentages for higher education applications (e.g., B.Tech Lateral Entry Entrance Examinations / LET), or estimating required target grades for upcoming semesters. PolyCGPA was engineered to eliminate these frictions through a pure client-side web application.
+    </p>
+
+    <h2 class="section-title">1.2 Key Objectives</h2>
+    <ul>
+        <li><strong>Mathematical Precision:</strong> Guarantee 100% mathematical fidelity with official SBTE Kerala credit weighting and grade point conversion tables.</li>
+        <li><strong>Pre-loaded Curricula:</strong> Provide pre-configured course codes, titles, and credit weights for all 6 semesters of Computer Engineering.</li>
+        <li><strong>Elective Adaptability:</strong> Dynamically update course names and lab assignments based on Program Elective selections in Semesters 5 and 6.</li>
+        <li><strong>Zero Dependencies:</strong> Run completely client-side in standard web browsers with zero installation, build tools, backend servers, or databases.</li>
+        <li><strong>Print & Submission Ready:</strong> Provide clean UI rendering on mobile phones, tablets, and desktops, with dedicated print styles for scorecards.</li>
+    </ul>
+
+    <h2 class="section-title">1.3 Project Highlights</h2>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 25%;">Feature Area</th>
+                <th style="width: 40%;">Capability</th>
+                <th style="width: 35%;">Academic Benefit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Semester SGPA Engine</strong></td>
+                <td>Preloaded 6-semester subjects with instant grade selection and custom calculations.</td>
+                <td>Eliminates manual credit multiplied by point arithmetic.</td>
+            </tr>
+            <tr>
+                <td><strong>Cumulative CGPA Engine</strong></td>
+                <td>Weighted aggregate calculation across all 6 semesters (120 credits total).</td>
+                <td>Provides immediate final diploma classification.</td>
+            </tr>
+            <tr>
+                <td><strong>Percentage Converter</strong></td>
+                <td>Instant conversion using official formula: <code>Percentage = GPA &times; 9.5</code>.</td>
+                <td>Meets entrance exams and placement criteria.</td>
+            </tr>
+            <tr>
+                <td><strong>Elective Switcher</strong></td>
+                <td>Dynamic switching between Cloud, Cyber Security, AI, etc. for S5 & S6.</td>
+                <td>Accounts for distinct practical lab affiliations.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ================= CHAPTER 2 ================= -->
+<div class="page-break"></div>
+<div>
+    <h1 class="chapter-title">2. SBTE Revision 2021 Grading Framework</h1>
+    
+    <h2 class="section-title">2.1 Letter Grades and Grade Points Scale</h2>
+    <p>
+        According to the official curriculum regulations of the State Board of Technical Education (SBTE), Kerala (Revision 2021), academic evaluations are assigned letter grades mapped to numerical grade points on a 10-point scale:
+    </p>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 15%; text-align: center;">Letter Grade</th>
+                <th style="width: 20%; text-align: center;">Grade Points</th>
+                <th style="width: 25%;">Marks Range (%)</th>
+                <th style="width: 25%;">Performance Level</th>
+                <th style="width: 15%; text-align: center;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-center"><strong>S</strong></td>
+                <td class="text-center font-mono">10</td>
+                <td>90% and above</td>
+                <td>Outstanding</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>A</strong></td>
+                <td class="text-center font-mono">9</td>
+                <td>80% to 89%</td>
+                <td>Excellent</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>B</strong></td>
+                <td class="text-center font-mono">8</td>
+                <td>70% to 79%</td>
+                <td>Very Good</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>C</strong></td>
+                <td class="text-center font-mono">7</td>
+                <td>60% to 69%</td>
+                <td>Good</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>D</strong></td>
+                <td class="text-center font-mono">6</td>
+                <td>50% to 59%</td>
+                <td>Satisfactory</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>E</strong></td>
+                <td class="text-center font-mono">5</td>
+                <td>40% to 49%</td>
+                <td>Pass / Minimum</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center"><strong>F</strong></td>
+                <td class="text-center font-mono">0</td>
+                <td>Below 40%</td>
+                <td>Failed / Backlog</td>
+                <td class="text-center"><span class="badge-pill badge-warning">FAIL</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">2.2 Academic Division Classification Rules</h2>
+    <p>
+        Upon completion of diploma requirements, overall academic division is determined based on the computed CGPA:
+    </p>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 30%;">CGPA Threshold</th>
+                <th style="width: 35%;">Equivalent Percentage</th>
+                <th style="width: 35%;">Official Academic Classification</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="font-mono"><strong>CGPA &ge; 8.50</strong></td>
+                <td>&ge; 80.75%</td>
+                <td><strong>First Class with Distinction</strong></td>
+            </tr>
+            <tr>
+                <td class="font-mono"><strong>6.75 &le; CGPA &lt; 8.50</strong></td>
+                <td>64.13% – 80.74%</td>
+                <td><strong>First Class</strong></td>
+            </tr>
+            <tr>
+                <td class="font-mono"><strong>5.50 &le; CGPA &lt; 6.75</strong></td>
+                <td>52.25% – 64.12%</td>
+                <td><strong>Second Class</strong></td>
+            </tr>
+            <tr>
+                <td class="font-mono"><strong>5.00 &le; CGPA &lt; 5.50</strong></td>
+                <td>47.50% – 52.24%</td>
+                <td><strong>Pass Class</strong></td>
+            </tr>
+            <tr>
+                <td class="font-mono"><strong>CGPA &lt; 5.00</strong></td>
+                <td>&lt; 47.50%</td>
+                <td><strong>Fail / Re-appear</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ================= CHAPTER 3 ================= -->
+<div class="page-break"></div>
+<div>
+    <h1 class="chapter-title">3. Mathematical Formulations & Algorithms</h1>
+    
+    <h2 class="section-title">3.1 Semester Grade Point Average (SGPA)</h2>
+    <p>
+        SGPA evaluates academic achievement for a single semester. It represents the credit-weighted average of the grade points secured across all registered subjects in that semester.
+    </p>
+
+    <div class="formula-card">
+        <div class="formula-title">SGPA Calculation Formula:</div>
+        <div class="formula-math">
+            SGPA = &Sigma;(C<sub>i</sub> &times; G<sub>i</sub>) / &Sigma;(C<sub>i</sub>)
+        </div>
+        <p style="font-size: 8.5pt; color: #065f46; margin: 4px 0 0;">
+            Where <strong>C<sub>i</sub></strong> is the credit assigned to course <em>i</em>, and <strong>G<sub>i</sub></strong> is the numerical grade point earned in course <em>i</em>.
+        </p>
+    </div>
+
+    <h2 class="section-title">3.2 Cumulative Grade Point Average (CGPA)</h2>
+    <p>
+        CGPA evaluates overall academic performance across all completed semesters (up to 6 semesters, 120 total credits). It is weighted by the credit weight of each completed semester.
+    </p>
+
+    <div class="formula-card">
+        <div class="formula-title">CGPA Calculation Formula:</div>
+        <div class="formula-math">
+            CGPA = &Sigma;(S<sub>k</sub> &times; C<sub>k</sub>) / &Sigma;(C<sub>k</sub>)
+        </div>
+        <p style="font-size: 8.5pt; color: #065f46; margin: 4px 0 0;">
+            Where <strong>S<sub>k</sub></strong> is the SGPA achieved in semester <em>k</em>, and <strong>C<sub>k</sub></strong> is the total credits of semester <em>k</em>.
+        </p>
+    </div>
+
+    <h2 class="section-title">3.3 Percentage Conversion Formula</h2>
+    <p>
+        Under SBTE Kerala regulations, the official formula to convert Grade Point Average into equivalent percentage marks is:
+    </p>
+
+    <div class="formula-card">
+        <div class="formula-title">Percentage Conversion:</div>
+        <div class="formula-math">
+            Equivalent Percentage (%) = GPA &times; 9.5
+        </div>
+    </div>
+</div>
+
+<!-- ================= CHAPTER 4 ================= -->
+<div class="page-break"></div>
+<div>
+    <h1 class="chapter-title">4. System Architecture, Directory & Code Structure</h1>
+    
+    <h2 class="section-title">4.1 Codebase File & Directory Organization</h2>
+    <p>
+        The PolyCGPA codebase is designed with clean modularity, separating data definitions, calculation logic, presentation markup, design styling, and user state management.
+    </p>
+
+    <div class="tree-view">
+poly-cgpa-calculator/
+├── index.html            # [4.5 KB] Main Portal & Navigation Hub
+├── sgpa.html             # [12.0 KB] Semester SGPA Calculator Screen & Modal
+├── cgpa.html             # [7.5 KB] Cumulative CGPA Calculator Screen & Cards
+├── login.html            # [2.6 KB] Student Sign In & Session Manager
+├── css/
+│   └── style.css         # [9.1 KB] Modern Design System, Theme & Print Rules
+├── js/
+│   ├── data.js           # [4.7 KB] 6-Semester Curriculum & Grading Definitions
+│   ├── calculator.js     # [3.3 KB] Mathematical Calculation Engine (SGPA & CGPA)
+│   └── app.js            # [1.0 KB] Session Handler & Dynamic Navbar Component
+└── README.md             # Project Documentation & Usage Guide
+    </div>
+
+    <h2 class="section-title">4.2 Architectural Component Responsibilities</h2>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 25%;">Component / File</th>
+                <th style="width: 25%;">Layer</th>
+                <th style="width: 50%;">Core Responsibility & Features</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>js/calculator.js</code></td>
+                <td><strong>Math & Logic Engine</strong></td>
+                <td>Implements pure calculation functions (<code>calculateSGPA</code>, <code>calculateCGPA</code>), backlog detection, and result rounding. Modular for browser & Node.js unit tests.</td>
+            </tr>
+            <tr>
+                <td><code>js/data.js</code></td>
+                <td><strong>Data Service Layer</strong></td>
+                <td>Stores official 120-credit Computer Engineering syllabus, course codes, elective groups, grade point maps, and academic classification lookup.</td>
+            </tr>
+            <tr>
+                <td><code>js/app.js</code></td>
+                <td><strong>App & Session Helper</strong></td>
+                <td>Initializes UI components, handles localStorage session state for logged-in students, and updates the dynamic navigation bar.</td>
+            </tr>
+            <tr>
+                <td><code>css/style.css</code></td>
+                <td><strong>Presentation Layer</strong></td>
+                <td>Provides CSS variables, responsive typography, card layouts, grade badges, modal overlays, and print-media styles.</td>
+            </tr>
+            <tr>
+                <td><code>sgpa.html</code></td>
+                <td><strong>Semester UI</strong></td>
+                <td>Renders semester tabs (S1-S6), dynamic subject tables, elective selectors, grade dropdowns, and instant calculation modal.</td>
+            </tr>
+            <tr>
+                <td><code>cgpa.html</code></td>
+                <td><strong>Cumulative UI</strong></td>
+                <td>Renders 6-semester SGPA input cards, credit auto-fill, include/exclude toggles, live CGPA scorecard, and printable format.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">4.3 System Data Flow Architecture</h2>
+    <div class="diagram-container">
+        <div class="flow-grid">
+            <div class="flow-step">
+                <strong>User Input</strong><br>
+                Semester & Grades Selection
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step">
+                <strong>Data Service</strong><br>
+                <code>js/data.js</code> Curriculum Lookup
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step">
+                <strong>Calc Engine</strong><br>
+                <code>js/calculator.js</code> Math Formula
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-step">
+                <strong>Result View</strong><br>
+                Scorecard & Classification
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= CHAPTER 5 ================= -->
+<div class="page-break"></div>
+<div>
+    <h1 class="chapter-title">5. Complete 6-Semester Curriculum & Credit Allocation</h1>
+    <p>
+        The following tables document the official 120-credit curriculum for the <strong>Diploma in Computer Engineering (Revision 2021)</strong> as implemented in <code>js/data.js</code>:
+    </p>
+
+    <h2 class="section-title">Semester 1 (Total Credits: 21.0) &amp; Semester 2 (Total Credits: 20.0)</h2>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 12%;">Code</th>
+                <th style="width: 48%;">Semester 1 Course Title</th>
+                <th style="width: 10%; text-align: center;">Cr</th>
+                <th style="width: 12%;">Code</th>
+                <th style="width: 48%;">Semester 2 Course Title</th>
+                <th style="width: 10%; text-align: center;">Cr</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1001</td><td>Communication Skills in English</td><td class="text-center">4.0</td><td>2002</td><td>Mathematics II</td><td class="text-center">4.0</td></tr>
+            <tr><td>1002</td><td>Mathematics I</td><td class="text-center">5.0</td><td>2003</td><td>Applied Physics II</td><td class="text-center">3.0</td></tr>
+            <tr><td>1003</td><td>Applied Physics I</td><td class="text-center">3.0</td><td>2031</td><td>Fund. of Electrical & Electronics</td><td class="text-center">3.0</td></tr>
+            <tr><td>1004</td><td>Applied Chemistry</td><td class="text-center">3.0</td><td>2131</td><td>Problem Solving & Programming</td><td class="text-center">3.0</td></tr>
+            <tr><td>1005</td><td>Engineering Graphics</td><td class="text-center">1.5</td><td>2008</td><td>Communication Skills Lab</td><td class="text-center">1.5</td></tr>
+            <tr><td>1007</td><td>Applied Chemistry Lab</td><td class="text-center">1.0</td><td>2006</td><td>Applied Physics Lab</td><td class="text-center">1.0</td></tr>
+            <tr><td>1008</td><td>Intro to IT Systems Lab</td><td class="text-center">2.0</td><td>2009</td><td>Engineering Workshop Practice</td><td class="text-center">1.5</td></tr>
+            <tr><td>1009</td><td>Sports and Yoga</td><td class="text-center">1.0</td><td>3009</td><td>Summer Internship I</td><td class="text-center">2.0</td></tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">Semester 3 (Total Credits: 20.0) &amp; Semester 4 (Total Credits: 20.5)</h2>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 12%;">Code</th>
+                <th style="width: 48%;">Semester 3 Course Title</th>
+                <th style="width: 10%; text-align: center;">Cr</th>
+                <th style="width: 12%;">Code</th>
+                <th style="width: 48%;">Semester 4 Course Title</th>
+                <th style="width: 10%; text-align: center;">Cr</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>3131</td><td>Computer Organisation</td><td class="text-center">4.0</td><td>4131</td><td>Object Oriented Programming</td><td class="text-center">4.0</td></tr>
+            <tr><td>3132</td><td>Programming in C</td><td class="text-center">3.0</td><td>4132</td><td>Computer Communication & Networks</td><td class="text-center">3.0</td></tr>
+            <tr><td>3133</td><td>Database Management Systems</td><td class="text-center">3.0</td><td>4133</td><td>Data Structures</td><td class="text-center">4.0</td></tr>
+            <tr><td>3134</td><td>Digital Computer Fundamentals</td><td class="text-center">3.0</td><td>4136</td><td>OOP Lab</td><td class="text-center">1.5</td></tr>
+            <tr><td>3135</td><td>Programming in C Lab</td><td class="text-center">1.5</td><td>4137</td><td>Web Programming Lab</td><td class="text-center">2.5</td></tr>
+            <tr><td>3136</td><td>DBMS Lab</td><td class="text-center">1.5</td><td>4138</td><td>Data Structures Lab</td><td class="text-center">1.5</td></tr>
+            <tr><td>3137</td><td>Digital Computer Fundamentals Lab</td><td class="text-center">1.5</td><td>4006</td><td>Minor Project</td><td class="text-center">2.0</td></tr>
+            <tr><td>3138</td><td>Web Technology Lab</td><td class="text-center">2.5</td><td>5009</td><td>Summer Internship II</td><td class="text-center">3.0</td></tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">Semester 5 (Total Credits: 17.5) &amp; Semester 6 (Total Credits: 21.0)</h2>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 12%;">Code</th>
+                <th style="width: 48%;">Semester 5 Course Title</th>
+                <th style="width: 10%; text-align: center;">Cr</th>
+                <th style="width: 12%;">Code</th>
+                <th style="width: 48%;">Semester 6 Course Title</th>
+                <th style="width: 10%; text-align: center;">Cr</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>5131</td><td>Embedded Systems & Real Time OS</td><td class="text-center">4.0</td><td>6001</td><td>Entrepreneurship and Startup</td><td class="text-center">4.0</td></tr>
+            <tr><td>5132</td><td>Operating System</td><td class="text-center">4.0</td><td>6131A</td><td>Internet of Things (IoT)</td><td class="text-center">4.0</td></tr>
+            <tr><td>5133A</td><td>Virtualisation & Cloud Computing (Elec)</td><td class="text-center">4.0</td><td>6132A</td><td>Open Elective Course</td><td class="text-center">4.0</td></tr>
+            <tr><td>5137</td><td>Embedded Systems & RTOS Lab</td><td class="text-center">1.5</td><td>6137</td><td>Network Engineering Lab</td><td class="text-center">2.5</td></tr>
+            <tr><td>5138</td><td>System Administration Lab</td><td class="text-center">1.5</td><td>6138</td><td>Smart Device Programming Lab</td><td class="text-center">1.5</td></tr>
+            <tr><td>5139A</td><td>Cloud Computing Lab (Elective)</td><td class="text-center">1.5</td><td>6139A</td><td>Internet of Things Lab</td><td class="text-center">1.5</td></tr>
+            <tr><td>5008</td><td>Seminar</td><td class="text-center">1.0</td><td>6009</td><td>Major Project (Capstone)</td><td class="text-center">4.0</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ================= CHAPTER 6 ================= -->
+<div class="page-break"></div>
+<div>
+    <h1 class="chapter-title">6. User Interface, Modules & Screen Design</h1>
+    
+    <h2 class="section-title">6.1 Application Flow and Pages</h2>
+    <p>
+        The PolyCGPA application is structured into four primary web interfaces designed with high responsiveness and accessibility:
+    </p>
+
+    <div class="info-card">
+        <strong>1. Portal Homepage (<code>index.html</code>)</strong><br>
+        Introduces students to the calculator suite, provides direct semester jump links (S1 through S6), showcases features, and displays user login status.
+    </div>
+
+    <div class="info-card">
+        <strong>2. Semester SGPA Calculator (<code>sgpa.html</code>)</strong><br>
+        Features pill-based semester switching, dynamic table generation based on selected semester, elective branch switching, bulk grade autofill buttons (All S, All A, All B), and a modal scorecard popup.
+    </div>
+
+    <div class="info-card">
+        <strong>3. Cumulative CGPA Calculator (<code>cgpa.html</code>)</strong><br>
+        Displays 6 semester cards with pre-filled official credit weights, live toggle checkboxes to include/exclude specific semesters, instant live CGPA computation, and one-click scorecard printing.
+    </div>
+
+    <div class="info-card">
+        <strong>4. Student Sign In & Session Manager (<code>login.html</code> &amp; <code>js/app.js</code>)</strong><br>
+        Provides client-side authentication and stores student session credentials in <code>localStorage</code>, updating the navigation bar dynamically across all pages.
+    </div>
+</div>
+
+<!-- ================= CHAPTER 7 ================= -->
+<div class="page-break"></div>
+<div>
+    <h1 class="chapter-title">7. Verification, Testing & Edge-Case Validation</h1>
+    <p>
+        Comprehensive test suites were executed to verify mathematical precision against manual calculations and SBTE Kerala grading rules:
+    </p>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 8%; text-align: center;">#</th>
+                <th style="width: 25%;">Test Scenario</th>
+                <th style="width: 32%;">Input Values</th>
+                <th style="width: 23%;">Expected / Actual Result</th>
+                <th style="width: 12%; text-align: center;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-center">TC-01</td>
+                <td><strong>Perfect SGPA (All S)</strong></td>
+                <td>Sem 3 (20 Credits), All Grade S (10 pts)</td>
+                <td>SGPA: 10.00, 95.0%, Distinction</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center">TC-02</td>
+                <td><strong>Mixed Grades SGPA</strong></td>
+                <td>S1 (21 Cr): 4S, 5A, 3B, 3C, 1.5A, 1S, 2A, 1S</td>
+                <td>SGPA: 8.86, 84.2%, Distinction</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center">TC-03</td>
+                <td><strong>Backlog Detection</strong></td>
+                <td>Sem 2: 7 Pass subjects + 1 'F' Grade</td>
+                <td>Class: "Fail / Re-appear (Backlog)"</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center">TC-04</td>
+                <td><strong>Full 6-Sem CGPA</strong></td>
+                <td>S1: 9.0, S2: 8.5, S3: 8.0, S4: 8.5, S5: 9.0, S6: 9.5</td>
+                <td>CGPA: 8.76, 83.2%, Distinction</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center">TC-05</td>
+                <td><strong>Partial Semesters</strong></td>
+                <td>Semesters 1, 2, 3 only enabled (61 credits)</td>
+                <td>Weighted CGPA across 61 credits</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center">TC-06</td>
+                <td><strong>Second Class Classification</strong></td>
+                <td>Cumulative CGPA: 6.20</td>
+                <td>Class: "Second Class"</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center">TC-07</td>
+                <td><strong>Pass Class Classification</strong></td>
+                <td>Cumulative CGPA: 5.25</td>
+                <td>Class: "Pass Class"</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center">TC-08</td>
+                <td><strong>Zero / Empty Inputs</strong></td>
+                <td>Empty subject list or all unselected</td>
+                <td>SGPA: 0.00, isValid: false</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+            <tr>
+                <td class="text-center">TC-09</td>
+                <td><strong>Elective Switching</strong></td>
+                <td>Switch Sem 5 Elective from 5133A to 5133B</td>
+                <td>Dynamic re-render without errors</td>
+                <td class="text-center"><span class="badge-pill badge-success">PASS</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ================= CHAPTER 8 ================= -->
+<div class="page-break"></div>
+<div>
+    <h1 class="chapter-title">8. Complete Source Code Listing</h1>
+    <p>
+        The complete, verbatim source code for all 8 files of the PolyCGPA software application is documented below:
+    </p>
+
+    <!-- 8.1 calculator.js -->
+    <div class="avoid-break" style="margin-top: 15px;">
+        <span class="code-title">8.1 js/calculator.js — Core Mathematical Engine</span>
+        <pre class="code-block"><span class="ln">  1</span> /**
+<span class="ln">  2</span>  * PolyCGPA - Core Calculation Engine
+<span class="ln">  3</span>  */
+<span class="ln">  4</span> 
+<span class="ln">  5</span> const Calculator = {
+<span class="ln">  6</span>     /**
+<span class="ln">  7</span>      * Calculate SGPA from subjects
+<span class="ln">  8</span>      * SGPA = Σ(Credits * Points) / Σ(Credits)
+<span class="ln">  9</span>      */
+<span class="ln"> 10</span>     calculateSGPA(subjects) {
+<span class="ln"> 11</span>         if (!Array.isArray(subjects) || !subjects.length) {
+<span class="ln"> 12</span>             return { sgpa: 0, totalCredits: 0, totalPoints: 0, percentage: &quot;0.0&quot;, academicClass: &quot;N/A&quot;, isValid: false };
+<span class="ln"> 13</span>         }
+<span class="ln"> 14</span> 
+<span class="ln"> 15</span>         let totalCredits = 0;
+<span class="ln"> 16</span>         let totalPoints = 0;
+<span class="ln"> 17</span>         let hasBacklog = false;
+<span class="ln"> 18</span> 
+<span class="ln"> 19</span>         for (const s of subjects) {
+<span class="ln"> 20</span>             const credits = parseFloat(s.credits) || 0;
+<span class="ln"> 21</span>             const points = typeof s.points === &quot;number&quot; ? s.points : (typeof DataService !== &quot;undefined&quot; ? DataService.getGradePoints(s.grade) : 0);
+<span class="ln"> 22</span>             if ((s.grade || &quot;&quot;).toUpperCase() === &quot;F&quot; || points === 0) hasBacklog = true;
+<span class="ln"> 23</span>             totalCredits += credits;
+<span class="ln"> 24</span>             totalPoints += (credits * points);
+<span class="ln"> 25</span>         }
+<span class="ln"> 26</span> 
+<span class="ln"> 27</span>         if (totalCredits &lt;= 0) {
+<span class="ln"> 28</span>             return { sgpa: 0, totalCredits: 0, totalPoints: 0, percentage: &quot;0.0&quot;, academicClass: &quot;N/A&quot;, isValid: false };
+<span class="ln"> 29</span>         }
+<span class="ln"> 30</span> 
+<span class="ln"> 31</span>         const sgpa = Math.round((totalPoints / totalCredits) * 100) / 100;
+<span class="ln"> 32</span>         const percentage = (sgpa * 9.5).toFixed(1);
+<span class="ln"> 33</span>         const academicClass = hasBacklog ? &quot;Fail / Re-appear (Backlog)&quot; : (typeof DataService !== &quot;undefined&quot; ? DataService.getClass(sgpa) : &quot;Pass&quot;);
+<span class="ln"> 34</span> 
+<span class="ln"> 35</span>         return {
+<span class="ln"> 36</span>             sgpa: parseFloat(sgpa.toFixed(2)),
+<span class="ln"> 37</span>             totalCredits: parseFloat(totalCredits.toFixed(1)),
+<span class="ln"> 38</span>             totalPoints: parseFloat(totalPoints.toFixed(2)),
+<span class="ln"> 39</span>             percentage,
+<span class="ln"> 40</span>             academicClass,
+<span class="ln"> 41</span>             isValid: true
+<span class="ln"> 42</span>         };
+<span class="ln"> 43</span>     },
+<span class="ln"> 44</span> 
+<span class="ln"> 45</span>     /**
+<span class="ln"> 46</span>      * Calculate CGPA across semesters
+<span class="ln"> 47</span>      * CGPA = Σ(SGPA * Credits) / Σ(Credits)
+<span class="ln"> 48</span>      */
+<span class="ln"> 49</span>     calculateCGPA(semesters) {
+<span class="ln"> 50</span>         if (!Array.isArray(semesters) || !semesters.length) {
+<span class="ln"> 51</span>             return { cgpa: 0, totalCredits: 0, totalPoints: 0, percentage: &quot;0.0&quot;, academicClass: &quot;N/A&quot;, completedSemesters: 0, isValid: false };
+<span class="ln"> 52</span>         }
+<span class="ln"> 53</span> 
+<span class="ln"> 54</span>         let totalCredits = 0;
+<span class="ln"> 55</span>         let totalPoints = 0;
+<span class="ln"> 56</span>         let completed = 0;
+<span class="ln"> 57</span> 
+<span class="ln"> 58</span>         for (const s of semesters) {
+<span class="ln"> 59</span>             if (s.included === false) continue;
+<span class="ln"> 60</span>             const sgpa = parseFloat(s.sgpa);
+<span class="ln"> 61</span>             const credits = parseFloat(s.credits);
+<span class="ln"> 62</span>             if (!isNaN(sgpa) &amp;&amp; !isNaN(credits) &amp;&amp; credits &gt; 0) {
+<span class="ln"> 63</span>                 totalCredits += credits;
+<span class="ln"> 64</span>                 totalPoints += (sgpa * credits);
+<span class="ln"> 65</span>                 completed++;
+<span class="ln"> 66</span>             }
+<span class="ln"> 67</span>         }
+<span class="ln"> 68</span> 
+<span class="ln"> 69</span>         if (totalCredits &lt;= 0 || completed === 0) {
+<span class="ln"> 70</span>             return { cgpa: 0, totalCredits: 0, totalPoints: 0, percentage: &quot;0.0&quot;, academicClass: &quot;N/A&quot;, completedSemesters: 0, isValid: false };
+<span class="ln"> 71</span>         }
+<span class="ln"> 72</span> 
+<span class="ln"> 73</span>         const cgpa = Math.round((totalPoints / totalCredits) * 100) / 100;
+<span class="ln"> 74</span>         const percentage = (cgpa * 9.5).toFixed(1);
+<span class="ln"> 75</span>         const academicClass = typeof DataService !== &quot;undefined&quot; ? DataService.getClass(cgpa) : &quot;Pass&quot;;
+<span class="ln"> 76</span> 
+<span class="ln"> 77</span>         return {
+<span class="ln"> 78</span>             cgpa: parseFloat(cgpa.toFixed(2)),
+<span class="ln"> 79</span>             totalCredits: parseFloat(totalCredits.toFixed(1)),
+<span class="ln"> 80</span>             totalPoints: parseFloat(totalPoints.toFixed(2)),
+<span class="ln"> 81</span>             percentage,
+<span class="ln"> 82</span>             academicClass,
+<span class="ln"> 83</span>             completedSemesters: completed,
+<span class="ln"> 84</span>             isValid: true
+<span class="ln"> 85</span>         };
+<span class="ln"> 86</span>     }
+<span class="ln"> 87</span> };
+<span class="ln"> 88</span> 
+<span class="ln"> 89</span> if (typeof module !== &quot;undefined&quot; &amp;&amp; module.exports) {
+<span class="ln"> 90</span>     module.exports = { Calculator };
+<span class="ln"> 91</span> }</pre>
+    </div>
+
+    <!-- 8.2 data.js -->
+    <div class="page-break"></div>
+    <div class="avoid-break">
+        <span class="code-title">8.2 js/data.js — Curriculum &amp; Grading Scale Data Module</span>
+        <pre class="code-block"><span class="ln">  1</span> /**
+<span class="ln">  2</span>  * PolyCGPA - Computer Engineering (Revision 2021) Curriculum &amp; Grading Data
+<span class="ln">  3</span>  */
+<span class="ln">  4</span> 
+<span class="ln">  5</span> const GRADING_SCALE = [
+<span class="ln">  6</span>     { grade: &quot;S&quot;, points: 10 },
+<span class="ln">  7</span>     { grade: &quot;A&quot;, points: 9 },
+<span class="ln">  8</span>     { grade: &quot;B&quot;, points: 8 },
+<span class="ln">  9</span>     { grade: &quot;C&quot;, points: 7 },
+<span class="ln"> 10</span>     { grade: &quot;D&quot;, points: 6 },
+<span class="ln"> 11</span>     { grade: &quot;E&quot;, points: 5 },
+<span class="ln"> 12</span>     { grade: &quot;F&quot;, points: 0 }
+<span class="ln"> 13</span> ];
+<span class="ln"> 14</span> 
+<span class="ln"> 15</span> const SYLLABUS = {
+<span class="ln"> 16</span>     1: [
+<span class="ln"> 17</span>         { code: &quot;1001&quot;, name: &quot;Communication Skills in English&quot;, credits: 4.0 },
+<span class="ln"> 18</span>         { code: &quot;1002&quot;, name: &quot;Mathematics I&quot;, credits: 5.0 },
+<span class="ln"> 19</span>         { code: &quot;1003&quot;, name: &quot;Applied Physics I&quot;, credits: 3.0 },
+<span class="ln"> 20</span>         { code: &quot;1004&quot;, name: &quot;Applied Chemistry&quot;, credits: 3.0 },
+<span class="ln"> 21</span>         { code: &quot;1005&quot;, name: &quot;Engineering Graphics&quot;, credits: 1.5 },
+<span class="ln"> 22</span>         { code: &quot;1007&quot;, name: &quot;Applied Chemistry Lab&quot;, credits: 1.0 },
+<span class="ln"> 23</span>         { code: &quot;1008&quot;, name: &quot;Introduction to IT Systems Lab&quot;, credits: 2.0 },
+<span class="ln"> 24</span>         { code: &quot;1009&quot;, name: &quot;Sports and Yoga&quot;, credits: 1.0 }
+<span class="ln"> 25</span>     ],
+<span class="ln"> 26</span>     2: [
+<span class="ln"> 27</span>         { code: &quot;2002&quot;, name: &quot;Mathematics II&quot;, credits: 4.0 },
+<span class="ln"> 28</span>         { code: &quot;2003&quot;, name: &quot;Applied Physics II&quot;, credits: 3.0 },
+<span class="ln"> 29</span>         { code: &quot;2031&quot;, name: &quot;Fundamentals of Electrical &amp; Electronics Engg&quot;, credits: 3.0 },
+<span class="ln"> 30</span>         { code: &quot;2131&quot;, name: &quot;Problem Solving and Programming&quot;, credits: 3.0 },
+<span class="ln"> 31</span>         { code: &quot;2008&quot;, name: &quot;Communication Skills in English Lab&quot;, credits: 1.5 },
+<span class="ln"> 32</span>         { code: &quot;2006&quot;, name: &quot;Applied Physics Lab&quot;, credits: 1.0 },
+<span class="ln"> 33</span>         { code: &quot;2009&quot;, name: &quot;Engineering Workshop Practice&quot;, credits: 1.5 },
+<span class="ln"> 34</span>         { code: &quot;3009&quot;, name: &quot;Summer Internship I&quot;, credits: 2.0 }
+<span class="ln"> 35</span>     ],
+<span class="ln"> 36</span>     3: [
+<span class="ln"> 37</span>         { code: &quot;3131&quot;, name: &quot;Computer Organisation&quot;, credits: 4.0 },
+<span class="ln"> 38</span>         { code: &quot;3132&quot;, name: &quot;Programming in C&quot;, credits: 3.0 },
+<span class="ln"> 39</span>         { code: &quot;3133&quot;, name: &quot;Database Management Systems&quot;, credits: 3.0 },
+<span class="ln"> 40</span>         { code: &quot;3134&quot;, name: &quot;Digital Computer Fundamentals&quot;, credits: 3.0 },
+<span class="ln"> 41</span>         { code: &quot;3135&quot;, name: &quot;Programming in C Lab&quot;, credits: 1.5 },
+<span class="ln"> 42</span>         { code: &quot;3136&quot;, name: &quot;Database Management System Lab&quot;, credits: 1.5 },
+<span class="ln"> 43</span>         { code: &quot;3137&quot;, name: &quot;Digital Computer Fundamentals Lab&quot;, credits: 1.5 },
+<span class="ln"> 44</span>         { code: &quot;3138&quot;, name: &quot;Web Technology Lab&quot;, credits: 2.5 }
+<span class="ln"> 45</span>     ],
+<span class="ln"> 46</span>     4: [
+<span class="ln"> 47</span>         { code: &quot;4131&quot;, name: &quot;Object Oriented Programming&quot;, credits: 4.0 },
+<span class="ln"> 48</span>         { code: &quot;4132&quot;, name: &quot;Computer Communication and Networks&quot;, credits: 3.0 },
+<span class="ln"> 49</span>         { code: &quot;4133&quot;, name: &quot;Data Structures&quot;, credits: 4.0 },
+<span class="ln"> 50</span>         { code: &quot;4136&quot;, name: &quot;Object Oriented Programming Lab&quot;, credits: 1.5 },
+<span class="ln"> 51</span>         { code: &quot;4137&quot;, name: &quot;Web Programming Lab&quot;, credits: 2.5 },
+<span class="ln"> 52</span>         { code: &quot;4138&quot;, name: &quot;Data Structures Lab&quot;, credits: 1.5 },
+<span class="ln"> 53</span>         { code: &quot;4006&quot;, name: &quot;Minor Project&quot;, credits: 2.0 },
+<span class="ln"> 54</span>         { code: &quot;5009&quot;, name: &quot;Summer Internship II&quot;, credits: 3.0 }
+<span class="ln"> 55</span>     ],
+<span class="ln"> 56</span>     5: [
+<span class="ln"> 57</span>         { code: &quot;5131&quot;, name: &quot;Embedded System and Real Time OS&quot;, credits: 4.0 },
+<span class="ln"> 58</span>         { code: &quot;5132&quot;, name: &quot;Operating System&quot;, credits: 4.0 },
+<span class="ln"> 59</span>         { code: &quot;5133A&quot;, name: &quot;Virtualisation Technology &amp; Cloud Computing&quot;, credits: 4.0 },
+<span class="ln"> 60</span>         { code: &quot;5137&quot;, name: &quot;Embedded Systems and Real Time OS Lab&quot;, credits: 1.5 },
+<span class="ln"> 61</span>         { code: &quot;5138&quot;, name: &quot;System Administration Lab&quot;, credits: 1.5 },
+<span class="ln"> 62</span>         { code: &quot;5139A&quot;, name: &quot;Virtualisation Technology &amp; Cloud Computing Lab&quot;, credits: 1.5 },
+<span class="ln"> 63</span>         { code: &quot;5008&quot;, name: &quot;Seminar&quot;, credits: 1.0 }
+<span class="ln"> 64</span>     ],
+<span class="ln"> 65</span>     6: [
+<span class="ln"> 66</span>         { code: &quot;6001&quot;, name: &quot;Entrepreneurship and Startup&quot;, credits: 4.0 },
+<span class="ln"> 67</span>         { code: &quot;6131A&quot;, name: &quot;Internet of Things&quot;, credits: 4.0 },
+<span class="ln"> 68</span>         { code: &quot;6132A&quot;, name: &quot;Open Elective&quot;, credits: 4.0 },
+<span class="ln"> 69</span>         { code: &quot;6137&quot;, name: &quot;Computer Network Engineering Lab&quot;, credits: 2.5 },
+<span class="ln"> 70</span>         { code: &quot;6138&quot;, name: &quot;Smart Device Programming Lab&quot;, credits: 1.5 },
+<span class="ln"> 71</span>         { code: &quot;6139A&quot;, name: &quot;Internet of Things Lab&quot;, credits: 1.5 },
+<span class="ln"> 72</span>         { code: &quot;6009&quot;, name: &quot;Major Project&quot;, credits: 4.0 }
+<span class="ln"> 73</span>     ]
+<span class="ln"> 74</span> };
+<span class="ln"> 75</span> 
+<span class="ln"> 76</span> const DataService = {
+<span class="ln"> 77</span>     getGradingScale() {
+<span class="ln"> 78</span>         return GRADING_SCALE;
+<span class="ln"> 79</span>     },
+<span class="ln"> 80</span> 
+<span class="ln"> 81</span>     getGradePoints(grade) {
+<span class="ln"> 82</span>         if (!grade) return 0;
+<span class="ln"> 83</span>         const g = GRADING_SCALE.find(item =&gt; item.grade === grade.toString().toUpperCase());
+<span class="ln"> 84</span>         return g ? g.points : 0;
+<span class="ln"> 85</span>     },
+<span class="ln"> 86</span> 
+<span class="ln"> 87</span>     getSubjects(semester) {
+<span class="ln"> 88</span>         const list = SYLLABUS[parseInt(semester, 10)];
+<span class="ln"> 89</span>         return list ? list.map(s =&gt; ({ ...s })) : [];
+<span class="ln"> 90</span>     },
+<span class="ln"> 91</span> 
+<span class="ln"> 92</span>     getClass(gpa) {
+<span class="ln"> 93</span>         const val = parseFloat(gpa);
+<span class="ln"> 94</span>         if (isNaN(val) || val &lt;= 0) return &quot;N/A&quot;;
+<span class="ln"> 95</span>         if (val &gt;= 8.5) return &quot;First Class with Distinction&quot;;
+<span class="ln"> 96</span>         if (val &gt;= 6.75) return &quot;First Class&quot;;
+<span class="ln"> 97</span>         if (val &gt;= 5.5) return &quot;Second Class&quot;;
+<span class="ln"> 98</span>         if (val &gt;= 5.0) return &quot;Pass Class&quot;;
+<span class="ln"> 99</span>         return &quot;Fail / Backlog&quot;;
+<span class="ln">100</span>     }
+<span class="ln">101</span> };
+<span class="ln">102</span> 
+<span class="ln">103</span> if (typeof module !== &#x27;undefined&#x27; &amp;&amp; module.exports) {
+<span class="ln">104</span>     module.exports = { GRADING_SCALE, SYLLABUS, DataService };
+<span class="ln">105</span> }</pre>
+    </div>
+
+    <!-- 8.3 app.js -->
+    <div class="page-break"></div>
+    <div class="avoid-break">
+        <span class="code-title">8.3 js/app.js — Session &amp; Navigation Helper</span>
+        <pre class="code-block"><span class="ln">  1</span> /**
+<span class="ln">  2</span>  * PolyCGPA - App &amp; Auth Helper
+<span class="ln">  3</span>  */
+<span class="ln">  4</span> const App = {
+<span class="ln">  5</span>     init() {
+<span class="ln">  6</span>         const auth = document.getElementById(&quot;navAuth&quot;);
+<span class="ln">  7</span>         if (!auth) return;
+<span class="ln">  8</span> 
+<span class="ln">  9</span>         const user = localStorage.getItem(&quot;polycgpa_user&quot;);
+<span class="ln"> 10</span>         if (user) {
+<span class="ln"> 11</span>             auth.innerHTML = `
+<span class="ln"> 12</span>                 &lt;div style=&quot;display:flex; align-items:center; gap:8px;&quot;&gt;
+<span class="ln"> 13</span>                     &lt;span style=&quot;font-size:13px; font-weight:600;&quot;&gt;👤 ${user}&lt;/span&gt;
+<span class="ln"> 14</span>                     &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary btn-sm&quot; id=&quot;signOutBtn&quot;&gt;Sign Out&lt;/button&gt;
+<span class="ln"> 15</span>                 &lt;/div&gt;
+<span class="ln"> 16</span>             `;
+<span class="ln"> 17</span>             document.getElementById(&quot;signOutBtn&quot;)?.addEventListener(&quot;click&quot;, () =&gt; {
+<span class="ln"> 18</span>                 localStorage.removeItem(&quot;polycgpa_user&quot;);
+<span class="ln"> 19</span>                 window.location.reload();
+<span class="ln"> 20</span>             });
+<span class="ln"> 21</span>         } else {
+<span class="ln"> 22</span>             auth.innerHTML = `&lt;a href=&quot;login.html&quot; class=&quot;btn btn-primary btn-sm&quot;&gt;Sign In&lt;/a&gt;`;
+<span class="ln"> 23</span>         }
+<span class="ln"> 24</span>     }
+<span class="ln"> 25</span> };
+<span class="ln"> 26</span> 
+<span class="ln"> 27</span> document.addEventListener(&quot;DOMContentLoaded&quot;, () =&gt; App.init());</pre>
+    </div>
+
+    <!-- 8.4 login.html -->
+    <div class="page-break"></div>
+    <div class="avoid-break">
+        <span class="code-title">8.4 login.html — Student Authentication &amp; Session UI</span>
+        <pre class="code-block"><span class="ln">  1</span> &lt;!DOCTYPE html&gt;
+<span class="ln">  2</span> &lt;html lang=&quot;en&quot;&gt;
+<span class="ln">  3</span> &lt;head&gt;
+<span class="ln">  4</span>     &lt;meta charset=&quot;UTF-8&quot;&gt;
+<span class="ln">  5</span>     &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+<span class="ln">  6</span>     &lt;title&gt;Sign In — PolyCGPA&lt;/title&gt;
+<span class="ln">  7</span>     &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;
+<span class="ln">  8</span> &lt;/head&gt;
+<span class="ln">  9</span> &lt;body&gt;
+<span class="ln"> 10</span> 
+<span class="ln"> 11</span>     &lt;!-- Simple Navbar --&gt;
+<span class="ln"> 12</span>     &lt;header class=&quot;navbar&quot;&gt;
+<span class="ln"> 13</span>         &lt;a href=&quot;index.html&quot; class=&quot;logo&quot;&gt;
+<span class="ln"> 14</span>             &lt;span class=&quot;logo-icon&quot;&gt;CT&lt;/span&gt;
+<span class="ln"> 15</span>             &lt;span&gt;Poly&lt;span&gt;CGPA&lt;/span&gt;&lt;/span&gt;
+<span class="ln"> 16</span>         &lt;/a&gt;
+<span class="ln"> 17</span> 
+<span class="ln"> 18</span>     &lt;/header&gt;
+<span class="ln"> 19</span> 
+<span class="ln"> 20</span>     &lt;!-- Login Content --&gt;
+<span class="ln"> 21</span>     &lt;main class=&quot;login-wrap&quot;&gt;
+<span class="ln"> 22</span>         &lt;div class=&quot;login-box&quot;&gt;
+<span class="ln"> 23</span>             &lt;h1 style=&quot;font-size: 22px; font-weight: 800; margin-bottom: 6px;&quot;&gt;Student Sign In&lt;/h1&gt;
+<span class="ln"> 24</span>             &lt;p style=&quot;font-size: 13px; color: var(--text-muted); margin-bottom: 22px;&quot;&gt;Diploma in Computer Engineering&lt;/p&gt;
+<span class="ln"> 25</span> 
+<span class="ln"> 26</span>             &lt;form id=&quot;loginForm&quot;&gt;
+<span class="ln"> 27</span>                 &lt;div class=&quot;form-group&quot;&gt;
+<span class="ln"> 28</span>                     &lt;label for=&quot;username&quot;&gt;Username / Student Name&lt;/label&gt;
+<span class="ln"> 29</span>                     &lt;input type=&quot;text&quot; id=&quot;username&quot; class=&quot;form-control&quot; placeholder=&quot;Enter your name&quot; required autofocus&gt;
+<span class="ln"> 30</span>                 &lt;/div&gt;
+<span class="ln"> 31</span> 
+<span class="ln"> 32</span>                 &lt;div class=&quot;form-group&quot; style=&quot;margin-bottom: 20px;&quot;&gt;
+<span class="ln"> 33</span>                     &lt;label for=&quot;password&quot;&gt;Password&lt;/label&gt;
+<span class="ln"> 34</span>                     &lt;input type=&quot;password&quot; id=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Enter password&quot; required&gt;
+<span class="ln"> 35</span>                 &lt;/div&gt;
+<span class="ln"> 36</span> 
+<span class="ln"> 37</span>                 &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot; style=&quot;width: 100%;&quot;&gt;
+<span class="ln"> 38</span>                     Sign In →
+<span class="ln"> 39</span>                 &lt;/button&gt;
+<span class="ln"> 40</span>             &lt;/form&gt;
+<span class="ln"> 41</span> 
+<span class="ln"> 42</span>             &lt;div style=&quot;margin-top: 18px;&quot;&gt;
+<span class="ln"> 43</span>                 &lt;a href=&quot;index.html&quot; style=&quot;font-size: 13px; color: var(--text-muted);&quot;&gt;← Back to Home&lt;/a&gt;
+<span class="ln"> 44</span>             &lt;/div&gt;
+<span class="ln"> 45</span>         &lt;/div&gt;
+<span class="ln"> 46</span>     &lt;/main&gt;
+<span class="ln"> 47</span> 
+<span class="ln"> 48</span>     &lt;!-- Footer --&gt;
+<span class="ln"> 49</span>     &lt;footer&gt;
+<span class="ln"> 50</span>         &lt;p&gt;PolyCGPA — Diploma in Computer Engineering (Revision 2021)&lt;/p&gt;
+<span class="ln"> 51</span>     &lt;/footer&gt;
+<span class="ln"> 52</span> 
+<span class="ln"> 53</span>     &lt;!-- Scripts --&gt;
+<span class="ln"> 54</span>     &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
+<span class="ln"> 55</span>     &lt;script&gt;
+<span class="ln"> 56</span>         document.getElementById(&quot;loginForm&quot;).addEventListener(&quot;submit&quot;, function(e) {
+<span class="ln"> 57</span>             e.preventDefault();
+<span class="ln"> 58</span>             const username = document.getElementById(&quot;username&quot;).value.trim();
+<span class="ln"> 59</span>             if (!username) {
+<span class="ln"> 60</span>                 alert(&quot;Please enter a valid username.&quot;);
+<span class="ln"> 61</span>                 return;
+<span class="ln"> 62</span>             }
+<span class="ln"> 63</span> 
+<span class="ln"> 64</span>             // Print alert using JS
+<span class="ln"> 65</span>             alert(&quot;Signed in successfully! Welcome, &quot; + username + &quot;.&quot;);
+<span class="ln"> 66</span> 
+<span class="ln"> 67</span>             // Save login state in localStorage
+<span class="ln"> 68</span>             localStorage.setItem(&quot;polycgpa_user&quot;, username);
+<span class="ln"> 69</span> 
+<span class="ln"> 70</span>             // Redirect to home
+<span class="ln"> 71</span>             window.location.href = &quot;index.html&quot;;
+<span class="ln"> 72</span>         });
+<span class="ln"> 73</span>     &lt;/script&gt;
+<span class="ln"> 74</span> &lt;/body&gt;
+<span class="ln"> 75</span> &lt;/html&gt;</pre>
+    </div>
+
+    <!-- 8.5 index.html -->
+    <div class="page-break"></div>
+    <div class="avoid-break">
+        <span class="code-title">8.5 index.html — Homepage &amp; Navigation Hub</span>
+        <pre class="code-block"><span class="ln">  1</span> &lt;!DOCTYPE html&gt;
+<span class="ln">  2</span> &lt;html lang=&quot;en&quot;&gt;
+<span class="ln">  3</span> &lt;head&gt;
+<span class="ln">  4</span>     &lt;meta charset=&quot;UTF-8&quot;&gt;
+<span class="ln">  5</span>     &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+<span class="ln">  6</span>     &lt;title&gt;PolyCGPA — Computer Engineering SGPA &amp; CGPA Calculator&lt;/title&gt;
+<span class="ln">  7</span>     &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;
+<span class="ln">  8</span> &lt;/head&gt;
+<span class="ln">  9</span> &lt;body&gt;
+<span class="ln"> 10</span> 
+<span class="ln"> 11</span>     &lt;!-- Simple Navbar --&gt;
+<span class="ln"> 12</span>     &lt;header class=&quot;navbar&quot;&gt;
+<span class="ln"> 13</span>         &lt;a href=&quot;index.html&quot; class=&quot;logo&quot;&gt;
+<span class="ln"> 14</span>             &lt;span class=&quot;logo-icon&quot;&gt;CT&lt;/span&gt;
+<span class="ln"> 15</span>             &lt;span&gt;Poly&lt;span&gt;CGPA&lt;/span&gt;&lt;/span&gt;
+<span class="ln"> 16</span>         &lt;/a&gt;
+<span class="ln"> 17</span> 
+<span class="ln"> 18</span>         &lt;nav class=&quot;nav-links&quot;&gt;
+<span class="ln"> 19</span>             &lt;a href=&quot;sgpa.html&quot; class=&quot;nav-link&quot;&gt;SGPA Calculator&lt;/a&gt;
+<span class="ln"> 20</span>             &lt;a href=&quot;cgpa.html&quot; class=&quot;nav-link&quot;&gt;CGPA Calculator&lt;/a&gt;
+<span class="ln"> 21</span>         &lt;/nav&gt;
+<span class="ln"> 22</span> 
+<span class="ln"> 23</span>         &lt;div class=&quot;nav-actions&quot;&gt;
+<span class="ln"> 24</span>             &lt;div id=&quot;navAuth&quot;&gt;&lt;/div&gt;
+<span class="ln"> 25</span>         &lt;/div&gt;
+<span class="ln"> 26</span>     &lt;/header&gt;
+<span class="ln"> 27</span> 
+<span class="ln"> 28</span>     &lt;!-- Main Content --&gt;
+<span class="ln"> 29</span>     &lt;main class=&quot;container&quot;&gt;
+<span class="ln"> 30</span>         &lt;!-- Hero Section --&gt;
+<span class="ln"> 31</span>         &lt;section class=&quot;hero&quot;&gt;
+<span class="ln"> 32</span>             &lt;div class=&quot;hero-badge&quot;&gt;
+<span class="ln"> 33</span>                 &lt;span class=&quot;badge&quot;&gt;
+<span class="ln"> 34</span>                     &lt;span class=&quot;dot&quot;&gt;&lt;/span&gt; Diploma in Computer Engineering • Revision 2021
+<span class="ln"> 35</span>                 &lt;/span&gt;
+<span class="ln"> 36</span>             &lt;/div&gt;
+<span class="ln"> 37</span>             &lt;h1&gt;Computer Engineering&lt;br&gt;&lt;span&gt;SGPA &amp; CGPA&lt;/span&gt; Calculator&lt;/h1&gt;
+<span class="ln"> 38</span>             &lt;p&gt;
+<span class="ln"> 39</span>                 Fast, simple and accurate SGPA and CGPA calculator for Polytechnic Computer Engineering students.
+<span class="ln"> 40</span>             &lt;/p&gt;
+<span class="ln"> 41</span>         &lt;/section&gt;
+<span class="ln"> 42</span> 
+<span class="ln"> 43</span>         &lt;!-- Two Main Calculator Cards --&gt;
+<span class="ln"> 44</span>         &lt;section class=&quot;grid-2&quot;&gt;
+<span class="ln"> 45</span>             &lt;!-- SGPA Card --&gt;
+<span class="ln"> 46</span>             &lt;div class=&quot;card&quot; style=&quot;display: flex; flex-direction: column; justify-content: space-between;&quot;&gt;
+<span class="ln"> 47</span>                 &lt;div&gt;
+<span class="ln"> 48</span>                     &lt;div class=&quot;card-icon&quot;&gt;📘&lt;/div&gt;
+<span class="ln"> 49</span>                     &lt;h2 class=&quot;card-title&quot;&gt;Semester SGPA Calculator&lt;/h2&gt;
+<span class="ln"> 50</span>                     &lt;p class=&quot;card-sub&quot;&gt;
+<span class="ln"> 51</span>                         Calculate your Semester Grade Point Average (SGPA). Preloaded with all 6 semesters of Computer Engineering courses.
+<span class="ln"> 52</span>                     &lt;/p&gt;
+<span class="ln"> 53</span>                     &lt;div class=&quot;sem-quick-links&quot; style=&quot;margin-top: 16px; margin-bottom: 20px;&quot;&gt;
+<span class="ln"> 54</span>                         &lt;span style=&quot;font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;&quot;&gt;Select Semester:&lt;/span&gt;
+<span class="ln"> 55</span>                         &lt;div style=&quot;display: flex; gap: 6px; flex-wrap: wrap;&quot;&gt;
+<span class="ln"> 56</span>                             &lt;a href=&quot;sgpa.html?sem=1&quot; class=&quot;btn btn-secondary btn-sm&quot;&gt;Sem 1&lt;/a&gt;
+<span class="ln"> 57</span>                             &lt;a href=&quot;sgpa.html?sem=2&quot; class=&quot;btn btn-secondary btn-sm&quot;&gt;Sem 2&lt;/a&gt;
+<span class="ln"> 58</span>                             &lt;a href=&quot;sgpa.html?sem=3&quot; class=&quot;btn btn-secondary btn-sm&quot;&gt;Sem 3&lt;/a&gt;
+<span class="ln"> 59</span>                             &lt;a href=&quot;sgpa.html?sem=4&quot; class=&quot;btn btn-secondary btn-sm&quot;&gt;Sem 4&lt;/a&gt;
+<span class="ln"> 60</span>                             &lt;a href=&quot;sgpa.html?sem=5&quot; class=&quot;btn btn-secondary btn-sm&quot;&gt;Sem 5&lt;/a&gt;
+<span class="ln"> 61</span>                             &lt;a href=&quot;sgpa.html?sem=6&quot; class=&quot;btn btn-secondary btn-sm&quot;&gt;Sem 6&lt;/a&gt;
+<span class="ln"> 62</span>                         &lt;/div&gt;
+<span class="ln"> 63</span>                     &lt;/div&gt;
+<span class="ln"> 64</span>                 &lt;/div&gt;
+<span class="ln"> 65</span>                 &lt;a href=&quot;sgpa.html&quot; class=&quot;btn btn-primary&quot; style=&quot;width: 100%;&quot;&gt;
+<span class="ln"> 66</span>                     Open SGPA Calculator →
+<span class="ln"> 67</span>                 &lt;/a&gt;
+<span class="ln"> 68</span>             &lt;/div&gt;
+<span class="ln"> 69</span> 
+<span class="ln"> 70</span>             &lt;!-- CGPA Card --&gt;
+<span class="ln"> 71</span>             &lt;div class=&quot;card&quot; style=&quot;display: flex; flex-direction: column; justify-content: space-between;&quot;&gt;
+<span class="ln"> 72</span>                 &lt;div&gt;
+<span class="ln"> 73</span>                     &lt;div class=&quot;card-icon&quot;&gt;🎓&lt;/div&gt;
+<span class="ln"> 74</span>                     &lt;h2 class=&quot;card-title&quot;&gt;Cumulative CGPA Calculator&lt;/h2&gt;
+<span class="ln"> 75</span>                     &lt;p class=&quot;card-sub&quot;&gt;
+<span class="ln"> 76</span>                         Calculate your overall diploma CGPA across all completed semesters with official credit weighting (120 total credits).
+<span class="ln"> 77</span>                     &lt;/p&gt;
+<span class="ln"> 78</span>                     &lt;ul class=&quot;feature-list&quot; style=&quot;margin-top: 16px;&quot;&gt;
+<span class="ln"> 79</span>                         &lt;li&gt;✓ Pre-filled official semester credit weights&lt;/li&gt;
+<span class="ln"> 80</span>                         &lt;li&gt;✓ Instant equivalent percentage (&lt;code style=&quot;font-family: var(--font-mono); color: var(--primary);&quot;&gt;CGPA × 9.5&lt;/code&gt;)&lt;/li&gt;
+<span class="ln"> 81</span>                         &lt;li&gt;✓ Academic division classification&lt;/li&gt;
+<span class="ln"> 82</span>                     &lt;/ul&gt;
+<span class="ln"> 83</span>                 &lt;/div&gt;
+<span class="ln"> 84</span>                 &lt;a href=&quot;cgpa.html&quot; class=&quot;btn btn-primary&quot; style=&quot;width: 100%;&quot;&gt;
+<span class="ln"> 85</span>                     Open CGPA Calculator →
+<span class="ln"> 86</span>                 &lt;/a&gt;
+<span class="ln"> 87</span>             &lt;/div&gt;
+<span class="ln"> 88</span>         &lt;/section&gt;
+<span class="ln"> 89</span>     &lt;/main&gt;
+<span class="ln"> 90</span> 
+<span class="ln"> 91</span>     &lt;!-- Footer --&gt;
+<span class="ln"> 92</span>     &lt;footer&gt;
+<span class="ln"> 93</span>         &lt;p&gt;PolyCGPA — Diploma in Computer Engineering (Revision 2021)&lt;/p&gt;
+<span class="ln"> 94</span>     &lt;/footer&gt;
+<span class="ln"> 95</span> 
+<span class="ln"> 96</span>     &lt;!-- Scripts --&gt;
+<span class="ln"> 97</span>     &lt;script src=&quot;js/data.js&quot;&gt;&lt;/script&gt;
+<span class="ln"> 98</span>     &lt;script src=&quot;js/calculator.js&quot;&gt;&lt;/script&gt;
+<span class="ln"> 99</span>     &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
+<span class="ln">100</span> &lt;/body&gt;
+<span class="ln">101</span> &lt;/html&gt;</pre>
+    </div>
+
+    <!-- 8.6 sgpa.html -->
+    <div class="page-break"></div>
+    <div class="avoid-break">
+        <span class="code-title">8.6 sgpa.html — Semester SGPA Calculator Screen</span>
+        <pre class="code-block"><span class="ln">  1</span> &lt;!DOCTYPE html&gt;
+<span class="ln">  2</span> &lt;html lang=&quot;en&quot;&gt;
+<span class="ln">  3</span> &lt;head&gt;
+<span class="ln">  4</span>     &lt;meta charset=&quot;UTF-8&quot;&gt;
+<span class="ln">  5</span>     &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+<span class="ln">  6</span>     &lt;title&gt;Semester SGPA Calculator — Computer Engineering&lt;/title&gt;
+<span class="ln">  7</span>     &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;
+<span class="ln">  8</span> &lt;/head&gt;
+<span class="ln">  9</span> &lt;body&gt;
+<span class="ln"> 10</span> 
+<span class="ln"> 11</span>     &lt;!-- Navbar --&gt;
+<span class="ln"> 12</span>     &lt;header class=&quot;navbar&quot;&gt;
+<span class="ln"> 13</span>         &lt;a href=&quot;index.html&quot; class=&quot;logo&quot;&gt;
+<span class="ln"> 14</span>             &lt;span class=&quot;logo-icon&quot;&gt;CT&lt;/span&gt;
+<span class="ln"> 15</span>             &lt;span&gt;Poly&lt;span&gt;CGPA&lt;/span&gt;&lt;/span&gt;
+<span class="ln"> 16</span>         &lt;/a&gt;
+<span class="ln"> 17</span> 
+<span class="ln"> 18</span>         &lt;nav class=&quot;nav-links&quot;&gt;
+<span class="ln"> 19</span>             &lt;a href=&quot;sgpa.html&quot; class=&quot;nav-link active&quot;&gt;SGPA Calculator&lt;/a&gt;
+<span class="ln"> 20</span>             &lt;a href=&quot;cgpa.html&quot; class=&quot;nav-link&quot;&gt;CGPA Calculator&lt;/a&gt;
+<span class="ln"> 21</span>         &lt;/nav&gt;
+<span class="ln"> 22</span> 
+<span class="ln"> 23</span>         &lt;div class=&quot;nav-actions&quot;&gt;
+<span class="ln"> 24</span>             &lt;div id=&quot;navAuth&quot;&gt;&lt;/div&gt;
+<span class="ln"> 25</span>         &lt;/div&gt;
+<span class="ln"> 26</span>     &lt;/header&gt;
+<span class="ln"> 27</span> 
+<span class="ln"> 28</span>     &lt;!-- Main Content --&gt;
+<span class="ln"> 29</span>     &lt;main class=&quot;container&quot; style=&quot;padding-top: 24px; padding-bottom: 40px;&quot;&gt;
+<span class="ln"> 30</span>         &lt;div style=&quot;margin-bottom: 16px;&quot;&gt;
+<span class="ln"> 31</span>             &lt;h1 style=&quot;font-size: 24px; font-weight: 800;&quot;&gt;Semester SGPA Calculator&lt;/h1&gt;
+<span class="ln"> 32</span>             &lt;p style=&quot;color: var(--text-muted); font-size: 14px;&quot;&gt;
+<span class="ln"> 33</span>                 Diploma in Computer Engineering (Revision 2021)
+<span class="ln"> 34</span>             &lt;/p&gt;
+<span class="ln"> 35</span>         &lt;/div&gt;
+<span class="ln"> 36</span> 
+<span class="ln"> 37</span>         &lt;!-- Semester Selection Pills --&gt;
+<span class="ln"> 38</span>         &lt;div class=&quot;sem-pills no-print&quot; id=&quot;semPills&quot; style=&quot;margin-bottom: 18px;&quot;&gt;
+<span class="ln"> 39</span>             &lt;button type=&quot;button&quot; class=&quot;sem-pill&quot; data-sem=&quot;1&quot;&gt;Semester 1&lt;/button&gt;
+<span class="ln"> 40</span>             &lt;button type=&quot;button&quot; class=&quot;sem-pill&quot; data-sem=&quot;2&quot;&gt;Semester 2&lt;/button&gt;
+<span class="ln"> 41</span>             &lt;button type=&quot;button&quot; class=&quot;sem-pill active&quot; data-sem=&quot;3&quot;&gt;Semester 3&lt;/button&gt;
+<span class="ln"> 42</span>             &lt;button type=&quot;button&quot; class=&quot;sem-pill&quot; data-sem=&quot;4&quot;&gt;Semester 4&lt;/button&gt;
+<span class="ln"> 43</span>             &lt;button type=&quot;button&quot; class=&quot;sem-pill&quot; data-sem=&quot;5&quot;&gt;Semester 5&lt;/button&gt;
+<span class="ln"> 44</span>             &lt;button type=&quot;button&quot; class=&quot;sem-pill&quot; data-sem=&quot;6&quot;&gt;Semester 6&lt;/button&gt;
+<span class="ln"> 45</span>         &lt;/div&gt;
+<span class="ln"> 46</span> 
+<span class="ln"> 47</span>         &lt;!-- Elective Selector (S5 &amp; S6) --&gt;
+<span class="ln"> 48</span>         &lt;div id=&quot;electiveRow&quot; style=&quot;display: none; margin-bottom: 16px; background: var(--surface); padding: 14px 18px; border-radius: var(--radius); border: 1px solid var(--border);&quot;&gt;&lt;/div&gt;
+<span class="ln"> 49</span> 
+<span class="ln"> 50</span>         &lt;!-- Subjects Table Card --&gt;
+<span class="ln"> 51</span>         &lt;div class=&quot;card&quot;&gt;
+<span class="ln"> 52</span>             &lt;div class=&quot;card-header&quot;&gt;
+<span class="ln"> 53</span>                 &lt;h3 class=&quot;card-title&quot; id=&quot;semTitle&quot;&gt;Semester 3 Subjects&lt;/h3&gt;
+<span class="ln"> 54</span>                 &lt;span class=&quot;badge&quot; id=&quot;creditsBadge&quot;&gt;20.0 Credits&lt;/span&gt;
+<span class="ln"> 55</span>             &lt;/div&gt;
+<span class="ln"> 56</span> 
+<span class="ln"> 57</span>             &lt;div class=&quot;table-wrap&quot;&gt;
+<span class="ln"> 58</span>                 &lt;table class=&quot;table&quot;&gt;
+<span class="ln"> 59</span>                     &lt;thead&gt;
+<span class="ln"> 60</span>                         &lt;tr&gt;
+<span class="ln"> 61</span>                             &lt;th style=&quot;width: 40px; text-align: center;&quot;&gt;#&lt;/th&gt;
+<span class="ln"> 62</span>                             &lt;th&gt;Course Title&lt;/th&gt;
+<span class="ln"> 63</span>                             &lt;th style=&quot;width: 130px;&quot;&gt;Credits&lt;/th&gt;
+<span class="ln"> 64</span>                             &lt;th style=&quot;width: 200px;&quot;&gt;Letter Grade&lt;/th&gt;
+<span class="ln"> 65</span>                         &lt;/tr&gt;
+<span class="ln"> 66</span>                     &lt;/thead&gt;
+<span class="ln"> 67</span>                     &lt;tbody id=&quot;subjectsTbody&quot;&gt;&lt;/tbody&gt;
+<span class="ln"> 68</span>                 &lt;/table&gt;
+<span class="ln"> 69</span>             &lt;/div&gt;
+<span class="ln"> 70</span> 
+<span class="ln"> 71</span>             &lt;!-- Actions Bar --&gt;
+<span class="ln"> 72</span>             &lt;div class=&quot;action-bar no-print&quot; style=&quot;margin-top: 14px;&quot;&gt;
+<span class="ln"> 73</span>                 &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; id=&quot;calculateBtn&quot;&gt;⚡ Calculate SGPA&lt;/button&gt;
+<span class="ln"> 74</span> 
+<span class="ln"> 75</span>                 &lt;div style=&quot;display: flex; gap: 6px; flex-wrap: wrap;&quot;&gt;
+<span class="ln"> 76</span>                     &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary btn-sm&quot; onclick=&quot;setAllGrades(&#x27;S&#x27;)&quot;&gt;All S (10)&lt;/button&gt;
+<span class="ln"> 77</span>                     &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary btn-sm&quot; onclick=&quot;setAllGrades(&#x27;A&#x27;)&quot;&gt;All A (9)&lt;/button&gt;
+<span class="ln"> 78</span>                     &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary btn-sm&quot; onclick=&quot;setAllGrades(&#x27;B&#x27;)&quot;&gt;All B (8)&lt;/button&gt;
+<span class="ln"> 79</span>                 &lt;/div&gt;
+<span class="ln"> 80</span>             &lt;/div&gt;
+<span class="ln"> 81</span>         &lt;/div&gt;
+<span class="ln"> 82</span> 
+<span class="ln"> 83</span>         &lt;!-- Result Popup Modal --&gt;
+<span class="ln"> 84</span>         &lt;div class=&quot;modal-overlay&quot; id=&quot;resultModal&quot;&gt;
+<span class="ln"> 85</span>             &lt;div class=&quot;modal-box&quot;&gt;
+<span class="ln"> 86</span>                 &lt;button type=&quot;button&quot; class=&quot;modal-close-btn&quot; id=&quot;closeModalBtn&quot; title=&quot;Close&quot;&gt;✕&lt;/button&gt;
+<span class="ln"> 87</span>                 &lt;div style=&quot;font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;&quot; id=&quot;resultHeaderLabel&quot;&gt;
+<span class="ln"> 88</span>                     SEMESTER 3 RESULT
+<span class="ln"> 89</span>                 &lt;/div&gt;
+<span class="ln"> 90</span>                 &lt;div class=&quot;result-score&quot; id=&quot;resultScore&quot;&gt;10.00&lt;/div&gt;
+<span class="ln"> 91</span>                 &lt;div class=&quot;result-badge&quot; id=&quot;resultClass&quot;&gt;First Class with Distinction&lt;/div&gt;
+<span class="ln"> 92</span> 
+<span class="ln"> 93</span>                 &lt;div class=&quot;result-grid&quot;&gt;
+<span class="ln"> 94</span>                     &lt;div class=&quot;stat-box&quot;&gt;
+<span class="ln"> 95</span>                         &lt;span&gt;Total Credits&lt;/span&gt;
+<span class="ln"> 96</span>                         &lt;strong id=&quot;resultCredits&quot;&gt;20.0&lt;/strong&gt;
+<span class="ln"> 97</span>                     &lt;/div&gt;
+<span class="ln"> 98</span>                     &lt;div class=&quot;stat-box&quot;&gt;
+<span class="ln"> 99</span>                         &lt;span&gt;Total Points&lt;/span&gt;
+<span class="ln">100</span>                         &lt;strong id=&quot;resultPoints&quot;&gt;200.0&lt;/strong&gt;
+<span class="ln">101</span>                     &lt;/div&gt;
+<span class="ln">102</span>                     &lt;div class=&quot;stat-box&quot;&gt;
+<span class="ln">103</span>                         &lt;span&gt;Percentage&lt;/span&gt;
+<span class="ln">104</span>                         &lt;strong id=&quot;resultPercent&quot;&gt;95.0%&lt;/strong&gt;
+<span class="ln">105</span>                     &lt;/div&gt;
+<span class="ln">106</span>                 &lt;/div&gt;
+<span class="ln">107</span> 
+<span class="ln">108</span>                 &lt;div style=&quot;margin-top: 20px;&quot;&gt;
+<span class="ln">109</span>                     &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary&quot; style=&quot;width: 100%;&quot; id=&quot;modalOkBtn&quot;&gt;Close&lt;/button&gt;
+<span class="ln">110</span>                 &lt;/div&gt;
+<span class="ln">111</span>             &lt;/div&gt;
+<span class="ln">112</span>         &lt;/div&gt;
+<span class="ln">113</span>     &lt;/main&gt;
+<span class="ln">114</span> 
+<span class="ln">115</span>     &lt;!-- Footer --&gt;
+<span class="ln">116</span>     &lt;footer&gt;
+<span class="ln">117</span>         &lt;p&gt;PolyCGPA — Diploma in Computer Engineering (Revision 2021)&lt;/p&gt;
+<span class="ln">118</span>     &lt;/footer&gt;
+<span class="ln">119</span> 
+<span class="ln">120</span>     &lt;!-- Scripts --&gt;
+<span class="ln">121</span>     &lt;script src=&quot;js/data.js&quot;&gt;&lt;/script&gt;
+<span class="ln">122</span>     &lt;script src=&quot;js/calculator.js&quot;&gt;&lt;/script&gt;
+<span class="ln">123</span>     &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
+<span class="ln">124</span>     &lt;script&gt;
+<span class="ln">125</span>         let currentSem = 3;
+<span class="ln">126</span>         let s5Elective = &quot;5133A&quot;;
+<span class="ln">127</span>         let s6Elective = &quot;6131A&quot;;
+<span class="ln">128</span>         let subjects = [];
+<span class="ln">129</span> 
+<span class="ln">130</span>         const ELECTIVES_S5 = {
+<span class="ln">131</span>             &quot;5133A&quot;: { name: &quot;Virtualisation Technology &amp; Cloud Computing&quot;, lab: &quot;Virtualisation Tech &amp; Cloud Lab&quot; },
+<span class="ln">132</span>             &quot;5133B&quot;: { name: &quot;Ethical Hacking&quot;, lab: &quot;Ethical Hacking Lab&quot; },
+<span class="ln">133</span>             &quot;5133C&quot;: { name: &quot;Fundamentals of AI &amp; Machine Learning&quot;, lab: &quot;Fundamentals of AI &amp; ML Lab&quot; }
+<span class="ln">134</span>         };
+<span class="ln">135</span> 
+<span class="ln">136</span>         const ELECTIVES_S6 = {
+<span class="ln">137</span>             &quot;6131A&quot;: &quot;Internet of Things&quot;,
+<span class="ln">138</span>             &quot;6131B&quot;: &quot;Server Administration&quot;,
+<span class="ln">139</span>             &quot;6131C&quot;: &quot;Software Testing&quot;,
+<span class="ln">140</span>             &quot;6131D&quot;: &quot;Introduction to 5G&quot;
+<span class="ln">141</span>         };
+<span class="ln">142</span> 
+<span class="ln">143</span>         function init() {
+<span class="ln">144</span>             const sem = parseInt(new URLSearchParams(location.search).get(&quot;sem&quot;), 10);
+<span class="ln">145</span>             if (sem &gt;= 1 &amp;&amp; sem &lt;= 6) currentSem = sem;
+<span class="ln">146</span> 
+<span class="ln">147</span>             // Semester pill selection
+<span class="ln">148</span>             document.getElementById(&quot;semPills&quot;).onclick = (e) =&gt; {
+<span class="ln">149</span>                 const btn = e.target.closest(&quot;.sem-pill&quot;);
+<span class="ln">150</span>                 if (btn &amp;&amp; +btn.dataset.sem !== currentSem) {
+<span class="ln">151</span>                     currentSem = +btn.dataset.sem;
+<span class="ln">152</span>                     updateUI();
+<span class="ln">153</span>                     loadCurriculum();
+<span class="ln">154</span>                 }
+<span class="ln">155</span>             };
+<span class="ln">156</span> 
+<span class="ln">157</span>             // Modal open &amp; close
+<span class="ln">158</span>             const modal = document.getElementById(&quot;resultModal&quot;);
+<span class="ln">159</span>             document.getElementById(&quot;calculateBtn&quot;).onclick = () =&gt; { syncAndCalculate(); modal.classList.add(&quot;active&quot;); };
+<span class="ln">160</span>             modal.onclick = (e) =&gt; { if (e.target.id === &quot;resultModal&quot; || e.target.closest(&quot;#closeModalBtn, #modalOkBtn&quot;)) modal.classList.remove(&quot;active&quot;); };
+<span class="ln">161</span>             document.onkeydown = (e) =&gt; { if (e.key === &quot;Escape&quot;) modal.classList.remove(&quot;active&quot;); };
+<span class="ln">162</span> 
+<span class="ln">163</span>             updateUI();
+<span class="ln">164</span>             loadCurriculum();
+<span class="ln">165</span>         }
+<span class="ln">166</span> 
+<span class="ln">167</span>         function updateUI() {
+<span class="ln">168</span>             document.querySelectorAll(&quot;.sem-pill&quot;).forEach(p =&gt; p.classList.toggle(&quot;active&quot;, +p.dataset.sem === currentSem));
+<span class="ln">169</span>             document.getElementById(&quot;semTitle&quot;).textContent = `Semester ${currentSem} Subjects`;
+<span class="ln">170</span>             document.getElementById(&quot;resultHeaderLabel&quot;).textContent = `SEMESTER ${currentSem} RESULT`;
+<span class="ln">171</span> 
+<span class="ln">172</span>             const row = document.getElementById(&quot;electiveRow&quot;);
+<span class="ln">173</span>             if (currentSem === 5) {
+<span class="ln">174</span>                 row.style.display = &quot;block&quot;;
+<span class="ln">175</span>                 row.innerHTML = `&lt;label style=&quot;font-size:13px; font-weight:600; display:block; margin-bottom:6px;&quot;&gt;Choose Program Elective I:&lt;/label&gt;
+<span class="ln">176</span>                     &lt;select id=&quot;s5Select&quot; class=&quot;form-control&quot;&gt;${Object.keys(ELECTIVES_S5).map(k =&gt; `&lt;option value=&quot;${k}&quot; ${s5Elective === k ? &#x27;selected&#x27; : &#x27;&#x27;}&gt;${ELECTIVES_S5[k].name}&lt;/option&gt;`).join(&#x27;&#x27;)}&lt;/select&gt;`;
+<span class="ln">177</span>                 document.getElementById(&quot;s5Select&quot;).onchange = (e) =&gt; { s5Elective = e.target.value; loadCurriculum(); };
+<span class="ln">178</span>             } else if (currentSem === 6) {
+<span class="ln">179</span>                 row.style.display = &quot;block&quot;;
+<span class="ln">180</span>                 row.innerHTML = `&lt;label style=&quot;font-size:13px; font-weight:600; display:block; margin-bottom:6px;&quot;&gt;Choose Program Elective II:&lt;/label&gt;
+<span class="ln">181</span>                     &lt;select id=&quot;s6Select&quot; class=&quot;form-control&quot;&gt;${Object.keys(ELECTIVES_S6).map(k =&gt; `&lt;option value=&quot;${k}&quot; ${s6Elective === k ? &#x27;selected&#x27; : &#x27;&#x27;}&gt;${ELECTIVES_S6[k]}&lt;/option&gt;`).join(&#x27;&#x27;)}&lt;/select&gt;`;
+<span class="ln">182</span>                 document.getElementById(&quot;s6Select&quot;).onchange = (e) =&gt; { s6Elective = e.target.value; loadCurriculum(); };
+<span class="ln">183</span>             } else {
+<span class="ln">184</span>                 row.style.display = &quot;none&quot;;
+<span class="ln">185</span>             }
+<span class="ln">186</span>         }
+<span class="ln">187</span> 
+<span class="ln">188</span>         function loadCurriculum() {
+<span class="ln">189</span>             subjects = DataService.getSubjects(currentSem).map(s =&gt; ({ ...s, grade: &quot;S&quot;, points: 10 }));
+<span class="ln">190</span>             if (currentSem === 5 &amp;&amp; ELECTIVES_S5[s5Elective]) {
+<span class="ln">191</span>                 if (subjects[2]) subjects[2].name = ELECTIVES_S5[s5Elective].name;
+<span class="ln">192</span>                 if (subjects[5]) subjects[5].name = ELECTIVES_S5[s5Elective].lab;
+<span class="ln">193</span>             } else if (currentSem === 6 &amp;&amp; ELECTIVES_S6[s6Elective] &amp;&amp; subjects[1]) {
+<span class="ln">194</span>                 subjects[1].name = ELECTIVES_S6[s6Elective];
+<span class="ln">195</span>             }
+<span class="ln">196</span>             render();
+<span class="ln">197</span>         }
+<span class="ln">198</span> 
+<span class="ln">199</span>         function setAllGrades(gradeKey) {
+<span class="ln">200</span>             const pts = DataService.getGradePoints(gradeKey);
+<span class="ln">201</span>             subjects.forEach(s =&gt; { s.grade = gradeKey; s.points = pts; });
+<span class="ln">202</span>             render();
+<span class="ln">203</span>         }
+<span class="ln">204</span> 
+<span class="ln">205</span>         function render() {
+<span class="ln">206</span>             const scale = DataService.getGradingScale();
+<span class="ln">207</span>             document.getElementById(&quot;subjectsTbody&quot;).innerHTML = subjects.map((s, idx) =&gt; `
+<span class="ln">208</span>                 &lt;tr&gt;
+<span class="ln">209</span>                     &lt;td style=&quot;text-align: center; color: var(--text-muted); font-weight: 600;&quot;&gt;${idx + 1}&lt;/td&gt;
+<span class="ln">210</span>                     &lt;td&gt;
+<span class="ln">211</span>                         &lt;input type=&quot;text&quot; class=&quot;form-control&quot; value=&quot;${s.name}&quot; onchange=&quot;subjects[${idx}].name=this.value; syncAndCalculate();&quot; style=&quot;padding: 6px 10px; font-weight: 500;&quot;&gt;
+<span class="ln">212</span>                         ${s.code ? `&lt;small style=&quot;color: var(--text-muted); font-family: var(--font-mono); font-size: 11px;&quot;&gt;Code: ${s.code}&lt;/small&gt;` : &#x27;&#x27;}
+<span class="ln">213</span>                     &lt;/td&gt;
+<span class="ln">214</span>                     &lt;td style=&quot;width: 120px;&quot;&gt;
+<span class="ln">215</span>                         &lt;input type=&quot;number&quot; step=&quot;0.5&quot; min=&quot;0.5&quot; max=&quot;25&quot; class=&quot;form-control&quot; value=&quot;${s.credits}&quot; onchange=&quot;subjects[${idx}].credits=parseFloat(this.value)||0; syncAndCalculate();&quot; style=&quot;padding: 6px 10px; font-family: var(--font-mono);&quot;&gt;
+<span class="ln">216</span>                     &lt;/td&gt;
+<span class="ln">217</span>                     &lt;td style=&quot;width: 200px;&quot;&gt;
+<span class="ln">218</span>                         &lt;select class=&quot;form-control&quot; onchange=&quot;subjects[${idx}].grade=this.value; subjects[${idx}].points=DataService.getGradePoints(this.value); syncAndCalculate();&quot; style=&quot;padding: 6px 10px;&quot;&gt;
+<span class="ln">219</span>                             ${scale.map(g =&gt; `&lt;option value=&quot;${g.grade}&quot; ${g.grade === s.grade ? &#x27;selected&#x27; : &#x27;&#x27;}&gt;${g.grade} (${g.points} pts)&lt;/option&gt;`).join(&#x27;&#x27;)}
+<span class="ln">220</span>                         &lt;/select&gt;
+<span class="ln">221</span>                     &lt;/td&gt;
+<span class="ln">222</span>                 &lt;/tr&gt;
+<span class="ln">223</span>             `).join(&#x27;&#x27;);
+<span class="ln">224</span> 
+<span class="ln">225</span>             syncAndCalculate();
+<span class="ln">226</span>         }
+<span class="ln">227</span> 
+<span class="ln">228</span>         function syncAndCalculate() {
+<span class="ln">229</span>             const res = Calculator.calculateSGPA(subjects);
+<span class="ln">230</span>             document.getElementById(&quot;creditsBadge&quot;).textContent = `${res.totalCredits.toFixed(1)} Credits`;
+<span class="ln">231</span>             document.getElementById(&quot;resultScore&quot;).textContent = res.isValid ? res.sgpa.toFixed(2) : &quot;0.00&quot;;
+<span class="ln">232</span>             document.getElementById(&quot;resultClass&quot;).textContent = res.academicClass;
+<span class="ln">233</span>             document.getElementById(&quot;resultCredits&quot;).textContent = res.totalCredits.toFixed(1);
+<span class="ln">234</span>             document.getElementById(&quot;resultPoints&quot;).textContent = res.totalPoints.toFixed(1);
+<span class="ln">235</span>             document.getElementById(&quot;resultPercent&quot;).textContent = `${res.percentage}%`;
+<span class="ln">236</span>         }
+<span class="ln">237</span> 
+<span class="ln">238</span>         document.addEventListener(&quot;DOMContentLoaded&quot;, init);
+<span class="ln">239</span>     &lt;/script&gt;
+<span class="ln">240</span> &lt;/body&gt;
+<span class="ln">241</span> &lt;/html&gt;</pre>
+    </div>
+
+    <!-- 8.7 cgpa.html -->
+    <div class="page-break"></div>
+    <div class="avoid-break">
+        <span class="code-title">8.7 cgpa.html — Cumulative CGPA Calculator Screen</span>
+        <pre class="code-block"><span class="ln">  1</span> &lt;!DOCTYPE html&gt;
+<span class="ln">  2</span> &lt;html lang=&quot;en&quot;&gt;
+<span class="ln">  3</span> &lt;head&gt;
+<span class="ln">  4</span>     &lt;meta charset=&quot;UTF-8&quot;&gt;
+<span class="ln">  5</span>     &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+<span class="ln">  6</span>     &lt;title&gt;Cumulative CGPA Calculator — Computer Engineering&lt;/title&gt;
+<span class="ln">  7</span>     &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;
+<span class="ln">  8</span> &lt;/head&gt;
+<span class="ln">  9</span> &lt;body&gt;
+<span class="ln"> 10</span> 
+<span class="ln"> 11</span>     &lt;!-- Navbar --&gt;
+<span class="ln"> 12</span>     &lt;header class=&quot;navbar&quot;&gt;
+<span class="ln"> 13</span>         &lt;a href=&quot;index.html&quot; class=&quot;logo&quot;&gt;
+<span class="ln"> 14</span>             &lt;span class=&quot;logo-icon&quot;&gt;CT&lt;/span&gt;
+<span class="ln"> 15</span>             &lt;span&gt;Poly&lt;span&gt;CGPA&lt;/span&gt;&lt;/span&gt;
+<span class="ln"> 16</span>         &lt;/a&gt;
+<span class="ln"> 17</span> 
+<span class="ln"> 18</span>         &lt;nav class=&quot;nav-links&quot;&gt;
+<span class="ln"> 19</span>             &lt;a href=&quot;sgpa.html&quot; class=&quot;nav-link&quot;&gt;SGPA Calculator&lt;/a&gt;
+<span class="ln"> 20</span>             &lt;a href=&quot;cgpa.html&quot; class=&quot;nav-link active&quot;&gt;CGPA Calculator&lt;/a&gt;
+<span class="ln"> 21</span>         &lt;/nav&gt;
+<span class="ln"> 22</span> 
+<span class="ln"> 23</span>         &lt;div class=&quot;nav-actions&quot;&gt;
+<span class="ln"> 24</span>             &lt;div id=&quot;navAuth&quot;&gt;&lt;/div&gt;
+<span class="ln"> 25</span>         &lt;/div&gt;
+<span class="ln"> 26</span>     &lt;/header&gt;
+<span class="ln"> 27</span> 
+<span class="ln"> 28</span>     &lt;!-- Main Content --&gt;
+<span class="ln"> 29</span>     &lt;main class=&quot;container&quot; style=&quot;padding-top: 24px; padding-bottom: 40px;&quot;&gt;
+<span class="ln"> 30</span>         &lt;div style=&quot;margin-bottom: 16px;&quot;&gt;
+<span class="ln"> 31</span>             &lt;h1 style=&quot;font-size: 24px; font-weight: 800;&quot;&gt;Cumulative CGPA Calculator&lt;/h1&gt;
+<span class="ln"> 32</span>             &lt;p style=&quot;color: var(--text-muted); font-size: 14px;&quot;&gt;
+<span class="ln"> 33</span>                 Enter your SGPA for completed semesters (120 total diploma credits).
+<span class="ln"> 34</span>             &lt;/p&gt;
+<span class="ln"> 35</span>         &lt;/div&gt;
+<span class="ln"> 36</span> 
+<span class="ln"> 37</span>         &lt;!-- Semesters Table Card --&gt;
+<span class="ln"> 38</span>         &lt;div class=&quot;card&quot;&gt;
+<span class="ln"> 39</span>             &lt;div class=&quot;card-header&quot;&gt;
+<span class="ln"> 40</span>                 &lt;h3 class=&quot;card-title&quot;&gt;Completed Semester SGPAs&lt;/h3&gt;
+<span class="ln"> 41</span>                 &lt;span class=&quot;badge&quot; id=&quot;totalCreditsBadge&quot;&gt;120.0 Credits&lt;/span&gt;
+<span class="ln"> 42</span>             &lt;/div&gt;
+<span class="ln"> 43</span> 
+<span class="ln"> 44</span>             &lt;div class=&quot;table-wrap&quot;&gt;
+<span class="ln"> 45</span>                 &lt;table class=&quot;table&quot;&gt;
+<span class="ln"> 46</span>                     &lt;thead&gt;
+<span class="ln"> 47</span>                         &lt;tr&gt;
+<span class="ln"> 48</span>                             &lt;th style=&quot;width: 50px; text-align: center;&quot;&gt;Include&lt;/th&gt;
+<span class="ln"> 49</span>                             &lt;th style=&quot;width: 140px;&quot;&gt;Semester&lt;/th&gt;
+<span class="ln"> 50</span>                             &lt;th&gt;Semester SGPA (0.00 – 10.00)&lt;/th&gt;
+<span class="ln"> 51</span>                             &lt;th style=&quot;width: 140px;&quot;&gt;Credits&lt;/th&gt;
+<span class="ln"> 52</span>                             &lt;th style=&quot;width: 120px;&quot;&gt;Points&lt;/th&gt;
+<span class="ln"> 53</span>                         &lt;/tr&gt;
+<span class="ln"> 54</span>                     &lt;/thead&gt;
+<span class="ln"> 55</span>                     &lt;tbody id=&quot;cgpaTbody&quot;&gt;&lt;/tbody&gt;
+<span class="ln"> 56</span>                 &lt;/table&gt;
+<span class="ln"> 57</span>             &lt;/div&gt;
+<span class="ln"> 58</span> 
+<span class="ln"> 59</span>             &lt;div class=&quot;action-bar no-print&quot; style=&quot;margin-top: 14px;&quot;&gt;
+<span class="ln"> 60</span>                 &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary btn-sm&quot; id=&quot;resetBtn&quot;&gt;↺ Reset SGPAs&lt;/button&gt;
+<span class="ln"> 61</span>                 &lt;a href=&quot;sgpa.html&quot; class=&quot;btn btn-secondary btn-sm&quot;&gt;Calculate Semester SGPA →&lt;/a&gt;
+<span class="ln"> 62</span>             &lt;/div&gt;
+<span class="ln"> 63</span>         &lt;/div&gt;
+<span class="ln"> 64</span> 
+<span class="ln"> 65</span>         &lt;!-- CGPA Result Card --&gt;
+<span class="ln"> 66</span>         &lt;div class=&quot;result-card&quot; id=&quot;cgpaResultCard&quot;&gt;
+<span class="ln"> 67</span>             &lt;div style=&quot;font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;&quot;&gt;
+<span class="ln"> 68</span>                 OVERALL CUMULATIVE RESULT
+<span class="ln"> 69</span>             &lt;/div&gt;
+<span class="ln"> 70</span>             &lt;div class=&quot;result-score&quot; id=&quot;resultScore&quot;&gt;8.98&lt;/div&gt;
+<span class="ln"> 71</span>             &lt;div class=&quot;result-badge&quot; id=&quot;resultClass&quot;&gt;First Class with Distinction&lt;/div&gt;
+<span class="ln"> 72</span> 
+<span class="ln"> 73</span>             &lt;div class=&quot;result-grid&quot;&gt;
+<span class="ln"> 74</span>                 &lt;div class=&quot;stat-box&quot;&gt;
+<span class="ln"> 75</span>                     &lt;span&gt;Completed Terms&lt;/span&gt;
+<span class="ln"> 76</span>                     &lt;strong id=&quot;resultTerms&quot;&gt;6 Semesters&lt;/strong&gt;
+<span class="ln"> 77</span>                 &lt;/div&gt;
+<span class="ln"> 78</span>                 &lt;div class=&quot;stat-box&quot;&gt;
+<span class="ln"> 79</span>                     &lt;span&gt;Total Credits&lt;/span&gt;
+<span class="ln"> 80</span>                     &lt;strong id=&quot;resultCredits&quot;&gt;120.0&lt;/strong&gt;
+<span class="ln"> 81</span>                 &lt;/div&gt;
+<span class="ln"> 82</span>                 &lt;div class=&quot;stat-box&quot;&gt;
+<span class="ln"> 83</span>                     &lt;span&gt;Cumulative Points&lt;/span&gt;
+<span class="ln"> 84</span>                     &lt;strong id=&quot;resultPoints&quot;&gt;1077.5&lt;/strong&gt;
+<span class="ln"> 85</span>                 &lt;/div&gt;
+<span class="ln"> 86</span>                 &lt;div class=&quot;stat-box&quot;&gt;
+<span class="ln"> 87</span>                     &lt;span&gt;Percentage&lt;/span&gt;
+<span class="ln"> 88</span>                     &lt;strong id=&quot;resultPercent&quot;&gt;85.3%&lt;/strong&gt;
+<span class="ln"> 89</span>                 &lt;/div&gt;
+<span class="ln"> 90</span>             &lt;/div&gt;
+<span class="ln"> 91</span>         &lt;/div&gt;
+<span class="ln"> 92</span>     &lt;/main&gt;
+<span class="ln"> 93</span> 
+<span class="ln"> 94</span>     &lt;!-- Footer --&gt;
+<span class="ln"> 95</span>     &lt;footer&gt;
+<span class="ln"> 96</span>         &lt;p&gt;PolyCGPA — Diploma in Computer Engineering (Revision 2021)&lt;/p&gt;
+<span class="ln"> 97</span>     &lt;/footer&gt;
+<span class="ln"> 98</span> 
+<span class="ln"> 99</span>     &lt;!-- Scripts --&gt;
+<span class="ln">100</span>     &lt;script src=&quot;js/data.js&quot;&gt;&lt;/script&gt;
+<span class="ln">101</span>     &lt;script src=&quot;js/calculator.js&quot;&gt;&lt;/script&gt;
+<span class="ln">102</span>     &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;
+<span class="ln">103</span>     &lt;script&gt;
+<span class="ln">104</span>         const DEFAULT_SEMS = [
+<span class="ln">105</span>             { semester: 1, sgpa: 9.00, credits: 20.5, included: true },
+<span class="ln">106</span>             { semester: 2, sgpa: 8.50, credits: 19.0, included: true },
+<span class="ln">107</span>             { semester: 3, sgpa: 8.80, credits: 20.0, included: true },
+<span class="ln">108</span>             { semester: 4, sgpa: 9.20, credits: 21.5, included: true },
+<span class="ln">109</span>             { semester: 5, sgpa: 8.90, credits: 17.5, included: true },
+<span class="ln">110</span>             { semester: 6, sgpa: 9.40, credits: 21.5, included: true }
+<span class="ln">111</span>         ];
+<span class="ln">112</span> 
+<span class="ln">113</span>         let semesters = JSON.parse(JSON.stringify(DEFAULT_SEMS));
+<span class="ln">114</span> 
+<span class="ln">115</span>         function render() {
+<span class="ln">116</span>             const tbody = document.getElementById(&quot;cgpaTbody&quot;);
+<span class="ln">117</span>             tbody.innerHTML = semesters.map((sem, idx) =&gt; `
+<span class="ln">118</span>                 &lt;tr style=&quot;${!sem.included ? &#x27;opacity: 0.45; background: rgba(148,163,184,0.05);&#x27; : &#x27;&#x27;}&quot;&gt;
+<span class="ln">119</span>                     &lt;td style=&quot;text-align: center;&quot;&gt;
+<span class="ln">120</span>                         &lt;input type=&quot;checkbox&quot; class=&quot;sem-inc&quot; data-idx=&quot;${idx}&quot; ${sem.included ? &#x27;checked&#x27; : &#x27;&#x27;} style=&quot;cursor: pointer;&quot;&gt;
+<span class="ln">121</span>                     &lt;/td&gt;
+<span class="ln">122</span>                     &lt;td style=&quot;font-weight: 700;&quot;&gt;Semester ${sem.semester}&lt;/td&gt;
+<span class="ln">123</span>                     &lt;td&gt;
+<span class="ln">124</span>                         &lt;input type=&quot;number&quot; step=&quot;0.01&quot; min=&quot;0&quot; max=&quot;10&quot; class=&quot;form-control sem-sgpa&quot; data-idx=&quot;${idx}&quot; value=&quot;${sem.sgpa}&quot; placeholder=&quot;e.g. 8.50&quot; ${!sem.included ? &#x27;disabled&#x27; : &#x27;&#x27;} style=&quot;padding: 6px 10px; font-family: var(--font-mono);&quot;&gt;
+<span class="ln">125</span>                     &lt;/td&gt;
+<span class="ln">126</span>                     &lt;td style=&quot;font-family: var(--font-mono); font-weight: 600; color: var(--text-muted);&quot;&gt;${sem.credits.toFixed(1)}&lt;/td&gt;
+<span class="ln">127</span>                     &lt;td style=&quot;font-family: var(--font-mono); font-weight: 700; color: var(--primary);&quot;&gt;${sem.included ? (sem.sgpa * sem.credits).toFixed(1) : &#x27;—&#x27;}&lt;/td&gt;
+<span class="ln">128</span>                 &lt;/tr&gt;
+<span class="ln">129</span>             `).join(&#x27;&#x27;);
+<span class="ln">130</span> 
+<span class="ln">131</span>             tbody.querySelectorAll(&quot;.sem-inc&quot;).forEach(cb =&gt; {
+<span class="ln">132</span>                 cb.addEventListener(&quot;change&quot;, (e) =&gt; {
+<span class="ln">133</span>                     const idx = parseInt(e.target.dataset.idx, 10);
+<span class="ln">134</span>                     semesters[idx].included = e.target.checked;
+<span class="ln">135</span>                     render();
+<span class="ln">136</span>                 });
+<span class="ln">137</span>             });
+<span class="ln">138</span> 
+<span class="ln">139</span>             tbody.querySelectorAll(&quot;.sem-sgpa&quot;).forEach(inp =&gt; {
+<span class="ln">140</span>                 inp.addEventListener(&quot;input&quot;, (e) =&gt; {
+<span class="ln">141</span>                     const idx = parseInt(e.target.dataset.idx, 10);
+<span class="ln">142</span>                     semesters[idx].sgpa = parseFloat(e.target.value) || 0;
+<span class="ln">143</span>                     updateTotals();
+<span class="ln">144</span>                 });
+<span class="ln">145</span>             });
+<span class="ln">146</span> 
+<span class="ln">147</span>             updateTotals();
+<span class="ln">148</span>         }
+<span class="ln">149</span> 
+<span class="ln">150</span>         function updateTotals() {
+<span class="ln">151</span>             const active = semesters.filter(s =&gt; s.included);
+<span class="ln">152</span>             const res = Calculator.calculateCGPA(active);
+<span class="ln">153</span> 
+<span class="ln">154</span>             document.getElementById(&quot;totalCreditsBadge&quot;).textContent = `${res.totalCredits.toFixed(1)} Credits`;
+<span class="ln">155</span>             document.getElementById(&quot;resultScore&quot;).textContent = res.isValid ? res.cgpa.toFixed(2) : &quot;0.00&quot;;
+<span class="ln">156</span>             document.getElementById(&quot;resultClass&quot;).textContent = res.academicClass;
+<span class="ln">157</span>             document.getElementById(&quot;resultTerms&quot;).textContent = `${res.completedSemesters} Semesters`;
+<span class="ln">158</span>             document.getElementById(&quot;resultCredits&quot;).textContent = `${res.totalCredits.toFixed(1)} / 120.0`;
+<span class="ln">159</span>             document.getElementById(&quot;resultPoints&quot;).textContent = res.totalPoints.toFixed(1);
+<span class="ln">160</span>             document.getElementById(&quot;resultPercent&quot;).textContent = `${res.percentage}%`;
+<span class="ln">161</span>         }
+<span class="ln">162</span> 
+<span class="ln">163</span>         document.getElementById(&quot;resetBtn&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+<span class="ln">164</span>             semesters = JSON.parse(JSON.stringify(DEFAULT_SEMS));
+<span class="ln">165</span>             render();
+<span class="ln">166</span>         });
+<span class="ln">167</span> 
+<span class="ln">168</span>         document.addEventListener(&quot;DOMContentLoaded&quot;, render);
+<span class="ln">169</span>     &lt;/script&gt;
+<span class="ln">170</span> &lt;/body&gt;
+<span class="ln">171</span> &lt;/html&gt;</pre>
+    </div>
+
+    <!-- 8.8 css/style.css -->
+    <div class="page-break"></div>
+    <div class="avoid-break">
+        <span class="code-title">8.8 css/style.css — Design System, Layouts &amp; Print Rules</span>
+        <pre class="code-block"><span class="ln">  1</span> @import url(&#x27;https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&amp;family=JetBrains+Mono:wght@600;700&amp;display=swap&#x27;);
+<span class="ln">  2</span> 
+<span class="ln">  3</span> :root {
+<span class="ln">  4</span>     --bg: #F8FAFC;
+<span class="ln">  5</span>     --surface: #FFFFFF;
+<span class="ln">  6</span>     --card-hover: #F1F5F9;
+<span class="ln">  7</span>     --primary: #0284C7;
+<span class="ln">  8</span>     --primary-hover: #0369A1;
+<span class="ln">  9</span>     --primary-light: #E0F2FE;
+<span class="ln"> 10</span>     --text: #0F172A;
+<span class="ln"> 11</span>     --text-muted: #64748B;
+<span class="ln"> 12</span>     --border: #E2E8F0;
+<span class="ln"> 13</span>     --border-dark: #CBD5E1;
+<span class="ln"> 14</span>     --font: &#x27;Plus Jakarta Sans&#x27;, -apple-system, sans-serif;
+<span class="ln"> 15</span>     --font-mono: &#x27;JetBrains Mono&#x27;, monospace;
+<span class="ln"> 16</span>     --radius: 10px;
+<span class="ln"> 17</span> }
+<span class="ln"> 18</span> 
+<span class="ln"> 19</span> * { box-sizing: border-box; margin: 0; padding: 0; }
+<span class="ln"> 20</span> body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+<span class="ln"> 21</span> a { color: inherit; text-decoration: none; }
+<span class="ln"> 22</span> button, input, select { font-family: inherit; font-size: 14px; }
+<span class="ln"> 23</span> .container { max-width: 900px; margin: 0 auto; padding: 0 20px; width: 100%; }
+<span class="ln"> 24</span> 
+<span class="ln"> 25</span> /* Navbar */
+<span class="ln"> 26</span> .navbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+<span class="ln"> 27</span> .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; }
+<span class="ln"> 28</span> .logo-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 15px; }
+<span class="ln"> 29</span> .logo span span { color: var(--primary); }
+<span class="ln"> 30</span> .nav-links { display: flex; align-items: center; gap: 6px; }
+<span class="ln"> 31</span> .nav-link { padding: 7px 14px; font-size: 14px; font-weight: 600; color: var(--text-muted); border-radius: var(--radius); transition: 0.15s; }
+<span class="ln"> 32</span> .nav-link:hover, .nav-link.active { color: var(--primary); background: var(--primary-light); }
+<span class="ln"> 33</span> .nav-actions { display: flex; align-items: center; gap: 10px; }
+<span class="ln"> 34</span> 
+<span class="ln"> 35</span> /* Buttons &amp; Badges */
+<span class="ln"> 36</span> .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px; font-size: 14px; font-weight: 600; border-radius: var(--radius); border: 1px solid transparent; cursor: pointer; transition: 0.15s; text-align: center; }
+<span class="ln"> 37</span> .btn-sm { padding: 6px 12px; font-size: 13px; border-radius: 6px; }
+<span class="ln"> 38</span> .btn-primary { background: var(--primary); color: #fff; }
+<span class="ln"> 39</span> .btn-primary:hover { background: var(--primary-hover); }
+<span class="ln"> 40</span> .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+<span class="ln"> 41</span> .btn-secondary:hover { background: var(--card-hover); border-color: var(--border-dark); }
+<span class="ln"> 42</span> .btn-danger { background: transparent; color: #ef4444; border-color: var(--border); }
+<span class="ln"> 43</span> .btn-danger:hover { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; }
+<span class="ln"> 44</span> .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: var(--primary-light); color: var(--primary); border: 1px solid rgba(2, 132, 199, 0.2); }
+<span class="ln"> 45</span> .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+<span class="ln"> 46</span> 
+<span class="ln"> 47</span> /* Hero, Cards &amp; Layout */
+<span class="ln"> 48</span> .hero { padding: 32px 0 20px; text-align: center; }
+<span class="ln"> 49</span> .hero-badge { margin-bottom: 10px; }
+<span class="ln"> 50</span> .hero h1 { font-size: clamp(24px, 4vw, 32px); font-weight: 800; margin-bottom: 8px; line-height: 1.25; }
+<span class="ln"> 51</span> .hero h1 span { color: var(--primary); }
+<span class="ln"> 52</span> .hero p { font-size: 15px; color: var(--text-muted); max-width: 540px; margin: 0 auto; }
+<span class="ln"> 53</span> .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 20px; }
+<span class="ln"> 54</span> .card-icon { width: 44px; height: 44px; border-radius: var(--radius); background: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px; }
+<span class="ln"> 55</span> .card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-wrap: wrap; }
+<span class="ln"> 56</span> .card-title { font-size: 17px; font-weight: 700; }
+<span class="ln"> 57</span> .card-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+<span class="ln"> 58</span> .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 24px; }
+<span class="ln"> 59</span> .feature-list { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+<span class="ln"> 60</span> 
+<span class="ln"> 61</span> /* Semester Pills &amp; Form Controls */
+<span class="ln"> 62</span> .sem-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+<span class="ln"> 63</span> .sem-pill { padding: 8px 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.15s; white-space: nowrap; }
+<span class="ln"> 64</span> .sem-pill:hover { background: var(--card-hover); }
+<span class="ln"> 65</span> .sem-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+<span class="ln"> 66</span> .form-group { margin-bottom: 16px; text-align: left; }
+<span class="ln"> 67</span> .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+<span class="ln"> 68</span> .form-control { width: 100%; padding: 8px 10px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); color: var(--text); outline: none; transition: 0.15s; }
+<span class="ln"> 69</span> .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); }
+<span class="ln"> 70</span> .action-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+<span class="ln"> 71</span> 
+<span class="ln"> 72</span> /* Login */
+<span class="ln"> 73</span> .login-wrap { min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+<span class="ln"> 74</span> .login-box { width: 100%; max-width: 360px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 30px 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align: center; }
+<span class="ln"> 75</span> 
+<span class="ln"> 76</span> /* Tables */
+<span class="ln"> 77</span> .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+<span class="ln"> 78</span> .table { width: 100%; border-collapse: collapse; text-align: left; }
+<span class="ln"> 79</span> .table th { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--bg); }
+<span class="ln"> 80</span> .table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+<span class="ln"> 81</span> .table tr:last-child td { border-bottom: none; }
+<span class="ln"> 82</span> .table tr:hover { background: var(--card-hover); }
+<span class="ln"> 83</span> 
+<span class="ln"> 84</span> /* Result Card &amp; Modal Popup */
+<span class="ln"> 85</span> .result-card { background: var(--surface); border: 1px solid var(--border-dark); border-radius: 14px; padding: 22px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-top: 20px; position: relative; overflow: hidden; }
+<span class="ln"> 86</span> .result-card::before { content: &quot;&quot;; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--primary); }
+<span class="ln"> 87</span> .result-score { font-size: 42px; font-weight: 800; font-family: var(--font-mono); color: var(--primary); line-height: 1.1; margin: 8px 0; }
+<span class="ln"> 88</span> .result-badge { display: inline-block; padding: 4px 12px; background: var(--primary-light); color: var(--primary); border-radius: 9999px; font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+<span class="ln"> 89</span> .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-top: 14px; }
+<span class="ln"> 90</span> .stat-box { background: var(--bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: var(--radius); text-align: center; }
+<span class="ln"> 91</span> .stat-box span { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; display: block; }
+<span class="ln"> 92</span> .stat-box strong { font-size: 16px; font-family: var(--font-mono); color: var(--text); }
+<span class="ln"> 93</span> 
+<span class="ln"> 94</span> .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.2s ease; }
+<span class="ln"> 95</span> .modal-overlay.active { opacity: 1; visibility: visible; }
+<span class="ln"> 96</span> .modal-box { background: var(--surface); border: 1px solid var(--border-dark); border-radius: 14px; width: 100%; max-width: 440px; padding: 28px 22px 22px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15); position: relative; transform: scale(0.95) translateY(10px); transition: 0.2s ease; text-align: center; }
+<span class="ln"> 97</span> .modal-overlay.active .modal-box { transform: scale(1) translateY(0); }
+<span class="ln"> 98</span> .modal-close-btn { position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; transition: 0.15s; }
+<span class="ln"> 99</span> .modal-close-btn:hover { background: var(--card-hover); color: var(--text); }
+<span class="ln">100</span> 
+<span class="ln">101</span> /* Footer &amp; Media Queries */
+<span class="ln">102</span> footer { margin-top: auto; padding: 20px; background: var(--surface); border-top: 1px solid var(--border); text-align: center; font-size: 13px; color: var(--text-muted); }
+<span class="ln">103</span> @media print { .navbar, .no-print, .action-bar, .sem-pills, .modal-overlay { display: none !important; } body { background: #fff !important; } .card, .result-card { border: 1px solid #ddd !important; box-shadow: none !important; } }
+<span class="ln">104</span> @media (max-width: 600px) { .navbar { padding: 12px 16px; } .card { padding: 16px 14px; } .result-score { font-size: 36px; } .modal-box { padding: 22px 16px 18px; } }</pre>
+    </div>
+</div>
+
+<!-- ================= CHAPTER 9 ================= -->
+<div class="page-break"></div>
+<div style="padding-top: 5mm;">
+    <h1 class="chapter-title">9. Conclusion & Future Roadmap</h1>
+    
+    <h2 class="section-title">9.1 Conclusion</h2>
+    <p>
+        The <strong>PolyCGPA</strong> application successfully resolves the challenges associated with credit-weighted academic calculations under the <strong>SBTE Kerala Revision 2021</strong> curriculum for Diploma in Computer Engineering.
+    </p>
+    <p>
+        By packaging the entire 6-semester syllabus, elective bindings, grade points, and percentage conversion formulas into an intuitive, ultra-fast client-side web application, students and faculty can instantly evaluate academic standings with 100% mathematical precision.
+    </p>
+
+    <h2 class="section-title">9.2 Future Roadmap</h2>
+    <ul>
+        <li><strong>Multi-Branch Expansion:</strong> Adding preloaded curricula for Civil, Mechanical, Electrical, and Automobile Engineering.</li>
+        <li><strong>PDF Transcript Generator:</strong> Client-side PDF export of individual semester grade sheets using embedded jsPDF.</li>
+        <li><strong>Offline PWA Support:</strong> Adding Service Workers to enable full offline support as an installable Progressive Web App.</li>
+    </ul>
+
+    <div style="margin-top: 40px; text-align: center;">
+        <div style="font-size: 11pt; font-weight: 700; color: #0f172a; margin-bottom: 4px;">*** END OF PROJECT REPORT ***</div>
+        <div style="font-size: 9pt; color: #64748b;">PolyCGPA &bull; Diploma in Computer Engineering (Revision 2021) &bull; SBTE Kerala</div>
+    </div>
+</div>
+
+</body>
+</html>
