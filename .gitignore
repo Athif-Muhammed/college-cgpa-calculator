@@ -26,3 +26,7 @@ desktop.ini
 *.log
 .env
 .env.local
+
+# Archives & Backups
+archive/
+backup_poly_cgpa_calculator/
