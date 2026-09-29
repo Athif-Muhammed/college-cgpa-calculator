@@ -21,20 +21,38 @@ A simple, fast, and accurate SGPA and CGPA calculator for **Diploma in Computer 
 ## 📂 Project Structure
 
 ```
-├── index.html         # Homepage
-├── sgpa.html          # Semester SGPA Calculator
-├── cgpa.html          # Cumulative CGPA Calculator
-├── css/
-│   └── style.css      # Minimal responsive stylesheet
-├── js/
-│   ├── data.js        # Computer Engineering Revision 2021 subjects & credits
-│   ├── calculator.js  # Pure SGPA & CGPA math engine
-│   └── app.js         # Auth & UI helper
-└── backup_poly_cgpa_calculator/ # Complete backup of original multi-branch codebase
+poly-cgpa-calculator/
+├── web/                       # Web Application (Frontend)
+│   ├── index.html             # Homepage
+│   ├── sgpa.html              # Semester SGPA Calculator
+│   ├── cgpa.html              # Cumulative CGPA Calculator
+│   ├── login.html             # User login page
+│   ├── css/
+│   │   └── style.css          # Stylesheet
+│   └── js/
+│       ├── app.js             # Auth & UI helper
+│       ├── calculator.js      # Pure SGPA & CGPA math engine
+│       └── data.js            # Computer Engineering Revision 2021 subjects & credits
+├── cli/                       # C Console Application
+│   └── PolyCGPA.c             # Standalone C calculator
+├── docs/                      # Project documentation & reports
+│   ├── PolyCGPA_Project_Report.html
+│   └── PolyCGPA_Project_Report.pdf
+├── archive/                   # Backups & previous versions
+│   └── backup_poly_cgpa_calculator/
+└── README.md                  # Project root documentation
 ```
 
 ---
 
 ## 🚀 How to Run
 
-Simply open `index.html` in any browser. No servers or dependencies required.
+### Web Application
+Open `web/index.html` in any web browser. No server setup or external dependencies required.
+
+### C Console Application
+Compile and run `cli/PolyCGPA.c` with any standard C compiler (e.g., GCC):
+```bash
+gcc cli/PolyCGPA.c -o PolyCGPA
+./PolyCGPA
+```
